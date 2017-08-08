@@ -24,6 +24,8 @@ To Do:
 *******************************************************************************************************************************
 */
 
+#include <Wire.h>
+
 const int Memory_I2C_Addr = 0x50;                     //base address of FRAM
 
 
@@ -144,7 +146,6 @@ void Memory_WriteULong(unsigned int addr, unsigned long x)
 
   Wire.endTransmission();
 }
-
 
 
 
@@ -294,42 +295,7 @@ unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
 
 
 
-void Config_Memory_Print()
-{
-  //prints the contents of memory used for storing variables and settings
-  byte memory_LLoopv1;
-  byte memory_LLoopv2;
-  byte memory_Laddr = 0;
-  byte memory_Ldata;
-  unsigned int CRC;
-  Serial.println(F("Config Memory Contents"));
-  Serial.print(F("Lcn    0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F"));
-  Serial.println();
 
-  for (memory_LLoopv1 = 0; memory_LLoopv1 <= 15; memory_LLoopv1++)
-  {
-    Serial.print(F("0x"));
-    Serial.print(memory_LLoopv1, HEX);                       //print the register number
-    Serial.print(F("0  "));
-    for (memory_LLoopv2 = 0; memory_LLoopv2 <= 15; memory_LLoopv2++)
-    {
-      memory_Ldata = Memory_ReadByte(memory_Laddr);
-      if (memory_Ldata < 0x10) {
-        Serial.print("0");
-      }
-      Serial.print(memory_Ldata, HEX);                       //print the register number
-      Serial.print(F(" "));
-      memory_Laddr++;
-    }
-    Serial.println();
-  }
-
-  CRC = Memory_CRC(addr_StartBindData, addr_EndBindData);
-  Serial.print(F("Memory CRC 0x"));
-  Serial.println(CRC, HEX);
-  Serial.println();
-  
-}
 
 
 void Memory_Set(unsigned int startaddr, unsigned int endaddr, byte lval)

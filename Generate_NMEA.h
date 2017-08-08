@@ -45,7 +45,7 @@ To Do:
 #include <SendOnlySoftwareSerial.h>
 SendOnlySoftwareSerial Bluetooth_Serial (Bluetooth_TX);  // Tx pin
 
-char Bluetooth_buff[128];
+char Bluetooth_buff[Bluetooth_Buff_Size];
 
 void print_NMEA_Bluetooth(byte lCount)
 {
@@ -161,10 +161,10 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
 
   memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));        //clear array
 
-  Serial.print("Send NMEA > ");
+  Serial.print(F("Send NMEA > "));
 
   snprintf(Bluetooth_buff,
-           Payload_buffer_size,
+           Bluetooth_Buff_Size,
            "$GPGGA,000000.000,%s,%c,%s,%c,1,4,3.16,%s.0,M,53.3,M,,",
            LatArray,
            Latquad,
@@ -187,10 +187,10 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
   
   memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));         //clear array
 
-  Serial.print("Send NMEA > ");
+  Serial.print(F("Send NMEA > "));
 
   snprintf(Bluetooth_buff,
-           Payload_buffer_size,
+           Bluetooth_Buff_Size,
            "$GPRMC,000000.000,A,%s,%c,%s,%c,0.00,0.00,010101,,,A",
            LatArray,
            Latquad,

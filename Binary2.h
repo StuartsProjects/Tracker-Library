@@ -1,4 +1,4 @@
-//Binary2.h
+ //Binary2.h
 /*
 *******************************************************************************************************************************
 Easy Build LoRaTracker Programs for Arduino
@@ -30,7 +30,13 @@ void Write_Byte(byte addr, byte x, byte localbuff[])
 }
 
 
-void Write_Uint(byte addr, unsigned int x,  byte localbuff[])
+void Write_Int(byte addr, int x,  byte localbuff[])
+{
+  localbuff[addr] = lowByte(x);
+  localbuff[addr + 1] = highByte(x);
+}
+
+void Write_UInt(byte addr, unsigned int x,  byte localbuff[])
 {
   localbuff[addr] = lowByte(x);
   localbuff[addr + 1] = highByte(x);
@@ -82,7 +88,7 @@ float Read_Float(unsigned int addr, byte localbuff[])
 }
 
 
-unsigned int Read_Uint(byte addr, byte localbuff[])
+int Read_Int(byte addr, byte localbuff[])
 {
   byte lowbyte, highbyte;
   lowbyte = localbuff[addr];
@@ -91,4 +97,11 @@ unsigned int Read_Uint(byte addr, byte localbuff[])
 }
 
 
+unsigned int Read_UInt(byte addr, byte localbuff[])
+{
+  byte lowbyte, highbyte;
+  lowbyte = localbuff[addr];
+  highbyte = localbuff[addr + 1];
+  return (lowbyte + (highbyte * 256));
+}
 

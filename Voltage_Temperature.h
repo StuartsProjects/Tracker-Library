@@ -24,7 +24,7 @@ To Do:
 */
 
 
-long read_SupplyVoltage();
+int read_SupplyVoltage();
 void print_SupplyVoltage();
 float read_Temperature();
 void print_Temperature();
@@ -32,17 +32,18 @@ void print_Temperature();
 
 
 #ifdef CPU_VoltageRead
-long read_SupplyVoltage()
+int read_SupplyVoltage()
 {
-long result;                                           //use 1V1 ref
+long result;                                   //use 1V1 ref
+int temp;
 ADMUX = _BV(REFS0) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
 delay(10);                                             //wait for ref to be stable 
 ADCSRA |= _BV(ADSC);  
 while (bit_is_set(ADCSRA,ADSC));                       //wait for conversion
 result = ADCL; 
 result |= ADCH<<8;
-result = adc_constant / result;                        //calculate VCC reading in mV
-return result;
+temp = (int) adc_constant / result;                        //calculate VCC reading in mV
+return temp;
 }
 
 
@@ -65,19 +66,15 @@ float read_Temperature()
   
   ADMUX = (_BV(REFS1) | _BV(REFS0) | _BV(MUX3));       //set the internal reference and mux
   ADCSRA |= _BV(ADEN);                                 //enable the ADC
-
   delay(20);                                           //wait for voltages to be stable.
-
   ADCSRA |= _BV(ADSC);                                 //Start ADC
-  
+
   while (bit_is_set(ADCSRA,ADSC));                     //wait for conversion
 
   wADC = ADCW;                                         //read the result, low and high
-
   temp = (wADC - kelvin_offset ) / (temp_conversion_slope);   //use the kelvin_offset to convert to centigrade, slope scales reading
 
-
- return (temp);                                        //return temp as float
+ return temp;                                        //return temp as float
 }
 
 
@@ -92,22 +89,21 @@ Serial.println(F("C"));
 
 
 #ifdef External_VoltageRead
-long read_SupplyVoltage()
+int read_SupplyVoltage()
 {
   //relies on 1V1 internal reference and 91K & 11K resistor divider
   //returns supply in mV @ 10mV per AD bit read
-  int SupplyVolts, temp;
+  int temp, SupplyVolts;
   byte index;
-  
-  SupplyVolts = 0;
-  
+
+    
   analogReference(INTERNAL);
   for (index = 0; index <= 4; index++)                      //sample AD 3 times
   {
     temp = analogRead(SupplyAD);
     SupplyVolts = SupplyVolts + temp;
   }
-  SupplyVolts = (int) ((SupplyVolts / 5) * ADMultiplier);
+  SupplyVolts = ((SupplyVolts / 5) * ADMultiplier);
   return SupplyVolts;
 }
 

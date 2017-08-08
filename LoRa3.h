@@ -110,21 +110,21 @@ const byte lora_RegModemConfig3 = 0x26;
 const byte lora_RegPacketConfig2 = 0x31;
 const byte lora_RegDioMapping = 0x40;
 const byte lora_RegPllHop = 0x44;
+ 
 
-
-byte  lora_RXBUFF[128];           //buffer where received packets are stored
-byte  lora_TXBUFF[128];           //buffer for packet to send
+byte  lora_RXBUFF[lora_RXBUFF_Size];           //buffer where received packets are stored
+byte  lora_TXBUFF[lora_TXBUFF_Size];           //buffer for packet to send
 
 byte  lora_RXStart;               //start of packet data in RXbuff
 byte  lora_RXEnd;                 //end of packet data in RXbuff
-byte  lora_RXPacketType = 0;      //type number of received packet
+byte  lora_RXPacketType;          //type number of received packet
 byte  lora_RXDestination;         //destination address of received packet
 byte  lora_RXSource;              //source address of received packet
 unsigned int lora_RXpacketCount;  //count of received packets
 
 byte  lora_TXStart;               //start of packet data in TX buffer
 byte  lora_TXEnd;                 //end of packet data in TX buffer
-byte  lora_TXPacketType = 0;      //type number of transmitted packet
+byte  lora_TXPacketType;          //type number of transmitted packet
 byte  lora_TXDestination;         //destination address of transmitted packet
 byte  lora_TXSource;              //source address of transmitted packet
 unsigned int lora_TXpacketCount;  //count of transmitted packets
@@ -209,23 +209,23 @@ byte lora_GetOptimisation(byte Bandwidth, byte SpreadingFactor)
   tempBandwidth = lora_returnbandwidth(Bandwidth);
   symbolTime = lora_CalcSymbolTime(tempBandwidth, SpreadingFactor);
   
-  #ifdef Debug
-  Serial.print("Symbol Time ");
+  #ifdef DEBUG
+  Serial.print(F("Symbol Time "));
   Serial.print(symbolTime,3);
-  Serial.println("mS");
+  Serial.println(F("mS"));
   #endif
   
   if (symbolTime > 16)
   {
-    #ifdef Debug
-    Serial.println("Set LDR Opt on");
+    #ifdef DEBUG
+    Serial.println(F("LDR Opt on"));
     #endif
     return LowDoptON;
   }
   else
   {
-    #ifdef Debug
-    Serial.println("Set LDR Opt off");
+    #ifdef DEBUG
+    Serial.println(F("LDR Opt off"));
     #endif
     return LowDoptOFF;
   }
@@ -332,18 +332,14 @@ void lora_Setup()
   lora_Write(lora_RegSymbTimeoutLsb, 0xFF);   //RegSymbTimeoutLsb
   lora_Write(lora_RegPreambleLsb, 0x0C);      //RegPreambleLsb, default
   lora_Write(lora_RegFdevLsb, Deviation);     //LSB of deviation, 5kHz
-  if (!lora_CheckDevice())
-  {
-    Serial.print(F("LoRa Device Error"));
-    Serial.println();
-  }
 }
+
 
 
 void lora_TXONDirect(byte TXPower)
 {
   //turns on transmitter,in direct mode for FSK and audio  power level is from 2 to 17
-  #ifdef Debug
+  #ifdef DEBUG
   Serial.print(F("("));
   Serial.print(TXPower);
   Serial.print(F("dBm) "));
@@ -357,8 +353,15 @@ void lora_TXONDirect(byte TXPower)
 void lora_TXOFF()
 {
   //turns off transmitter
+  unsigned long temp;
   lora_Write(lora_RegOpMode, 0x08);           //TX and RX to sleep, in direct mode
-  lora_TXTime = (millis() - lora_StartTXTime);
+  #ifdef DEBUG
+  temp = millis() - lora_StartTXTime;
+  Serial.print(F("TX "));
+  Serial.print(temp);
+  Serial.println(F("mS"));
+  #endif
+  lora_TXTime = lora_TXTime + (millis() - lora_StartTXTime);
 }
 
 
@@ -414,7 +417,7 @@ void lora_Print()
     {
       RegData = lora_Read(Reg);
       if (RegData < 0x10) {
-        Serial.print("0");
+        Serial.print(F("0"));
       }
       Serial.print(RegData, HEX);           //print the register number
       Serial.print(F(" "));
@@ -473,7 +476,7 @@ void lora_RXBuffPrint(byte PrintType)
 void lora_RXOFF()
 {
   lora_Write(lora_RegOpMode, 0x89);                //TX and RX to sleep, in direct mode
-  lora_RXTime = (millis() - lora_StartRXTime);
+  lora_RXTime = lora_RXTime + (millis() - lora_StartRXTime);
 }
 
 
@@ -576,6 +579,7 @@ void lora_RXONLoRa()
   lora_Write(lora_RegIrqFlags, 0xFF);
   lora_Write(lora_RegDioMapping, 0x00);                  //DIO0 will be RXDone 
   lora_Write(lora_RegOpMode, 0x8D);
+  lora_StartRXTime = millis();
   lora_BackGroundRSSI = lora_Read(lora_RegRssiValue);    // get the background noise level
 }
 
@@ -614,7 +618,7 @@ byte lora_waitPacket(char waitPacket, unsigned long waitSeconds)
   unsigned long endtime;
   endtime = (millis() + (waitSeconds * 1000));
   lora_RXONLoRa();
-  #ifdef Debug
+  #ifdef DEBUG
   Serial.print(F("Wait "));
   Serial.write(waitPacket);
   Serial.println();
@@ -635,7 +639,7 @@ byte lora_waitPacket(char waitPacket, unsigned long waitSeconds)
 
     if ((waitSeconds > 0) && (millis() >= endtime))
     {
-      #ifdef Debug
+      #ifdef DEBUG
       Serial.println(F("Timeout"));
       #endif
       return 0;
@@ -701,10 +705,10 @@ void lora_TXBuffPrint(byte PrintType)
 void lora_TXONLoRa(byte TXPower)
 {
   //turns on LoRa transmitter, Sends packet, power level is from 2 to 17
-  #ifdef Debug
+  #ifdef DEBUG
   Serial.print(F("("));
   Serial.print(TXPower);
-  Serial.print(F("dBm) "));
+  Serial.print(F(" dBm "));
   #endif
   lora_StartTXTime = millis();
   lora_Write(lora_RegPaConfig, (TXPower + 0xEE));   //set TX power
@@ -763,7 +767,6 @@ void lora_Send(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char TXDesti
   }
   while (TXTimeout > 0 && RegData == 0) ;           //use a timeout counter, just in case the TX sent flag is missed
 
-  lora_TXTime = (millis() - lora_StartTXTime);
   lora_TXOFF();
 }
 
@@ -775,12 +778,12 @@ byte lora_QueuedSend(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char T
   byte RegData;
   unsigned int tempAttempts = Attempts;             //to store value of lora_Attempts
   
-  #ifdef Debug
-  Serial.print("Queue ");
+  #ifdef DEBUG
+  Serial.print(F("Queue "));
   Serial.write(TXPacketType);
   Serial.write(TXDestination);
   Serial.write(TXSource);
-  Serial.print(" Attempts ");
+  Serial.print(F(" Attempts "));
   Serial.println(Attempts);
   #endif
   
@@ -789,16 +792,16 @@ byte lora_QueuedSend(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char T
 
     if (!lora_waitPacket(ClearToSendCommand, 0))    //returns a value of 0 for timeout, 1 for packet received, no timeout
     {
-      #ifdef Debug
-      Serial.println("Exit QueuedSend");
+      #ifdef DEBUG
+      Serial.println(F("Exit QueuedSend"));
       #endif
       return 0;                                     //either timeout or key exit
     }
 
     delay(1000);
 
-    #ifdef Debug
-    Serial.print("Send ");
+    #ifdef DEBUG
+    Serial.print(F("Send "));
     Serial.write(TXPacketType);
     Serial.write(TXDestination);
     Serial.write(TXSource);
