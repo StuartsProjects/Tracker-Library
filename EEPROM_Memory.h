@@ -1,24 +1,26 @@
 //EEPROM_Memory.h
 /*
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
-  
-To Do:
-  
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
+
+  To Do:
+
 *******************************************************************************************************************************
 */
+
+#include <EEPROM.h>
 
 
 void Memory_WriteByte(unsigned int addr, byte x)
@@ -98,10 +100,10 @@ unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
 {
   uint16_t i, CRC;
 
-  CRC = 0xffff;                               //start value for CRC16
-  byte j;
+  CRC = 0xffff;                                         //start value for CRC16
+  byte j; 
 
-  for (i = startaddr; i <= endaddr; i++)                     //element 4 is first character after $$$$ at start
+  for (i = startaddr; i <= endaddr; i++)                //element 4 is first character after $$$$ at start
   {
     CRC ^= ((uint16_t)Memory_ReadByte(i) << 8);
     for (j = 0; j < 8; j++)

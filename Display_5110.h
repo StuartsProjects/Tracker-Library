@@ -1,25 +1,25 @@
 //Display_5110.h
 /*
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-This program creates a standard set of programs to use with the Nokia 5110 display. There are similar programs for other 
-displays. This allows for different displays to be used without needing chnages to the main programs.
-  
-To Do:
-  
+  This program creates a standard set of programs to use with the Nokia 5110 display. There are similar programs for other
+  displays. This allows for different displays to be used without needing chnages to the main programs.
+
+  To Do:
+
 *******************************************************************************************************************************
 */
 
@@ -62,27 +62,26 @@ void Display_SetTextSize(byte textsize)
 
 void Display_Char(char character)
 {
-disp.write(character);       
+  disp.write(character);
 }
 
 
 void Display_SetCurPos(byte col, byte row)
 {
- if (currentsize == 1)               //test for the font size currently in use
+  if (currentsize == 1)               //test for the font size currently in use
   {
-    col = col * 6;                   //Calculate the column position
-    row = (row * 8);                 //Calculate the row position
+    col = col * 6;                    //Calculate the column position
+    row = (row * 8);                  //Calculate the row position
   }
 
   if (currentsize == 2)
   {
-    col = col * 12;                  //Calculate the column position
-    row = (row * 16);                //Calculate the row position
+    col = col * 12;                   //Calculate the column position
+    row = (row * 16);                 //Calculate the row position
   }
- 
+
   disp.setCursor(col, row);           //done the conversion so position the cursor
 }
-
 
 
 void Display_Setup()

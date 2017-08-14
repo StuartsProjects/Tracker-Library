@@ -1,27 +1,24 @@
-This repository contains the library programs (.h) files required by the following LoRaTracker programs;
-
-HAB2
-Receiver2
-Sensor1_328P
+This repository contains the library programs (.h) files required by the various LoRaTracker.
 
 
-The library files need to be accessible to the Arduino IDE, there are two ways to achieve this;
+The library files need to be accessible to the Arduino IDE at program compile time, there are two ways
+to achieve this;
 
 
 1. In the Arduino libraries folder create a folder called 'LoRaTracker' and place all the files in there. 
 
-	For instance I have my Arduino installation on a seperate drive so I would create this folder;
+   For instance I have my Arduino installation on a seperate drive (Y:) so I would create this folder;
 
-	Y:\Arduino\Libraries\LoRaTracker
+   Y:\Arduino\Libraries\LoRaTracker
 
 
 
 2. Copy all the library files into the same folder as the programs .ino file. For example I have 
-	the receiver program here;
+   a receiver program here;
 
-	Y:\Projects\Reciever2\LoRaTracker_Receiver2_160717.ino
+   Y:\Projects\Receiver2\LoRaTracker_Receiver2_160717.ino
 
-	So I would need to copy all the library files into the Y:\Projects\Reciever2\ folder.
+   So I would need to copy all the library files into the Y:\Projects\Receiver2\ folder.
 
 
 

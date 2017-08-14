@@ -2,56 +2,60 @@
 /*
 
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-Proram Generates GPGGA and GPRMC sentences from decimal Latitude, Longitude and Altitude values and sends NMEA sentence to 
-Serial port.
+  Proram Generates GPGGA and GPRMC sentences from decimal Latitude, Longitude and Altitude values and sends NMEA sentence to
+  Serial port.
 
-For use with mapping applications such as MemoryMap (PC) and AlpinQuest (Android)
+  For use with mapping applications such as MemoryMap (PC) and AlpinQuest (Android)
 
-The GPS Bluetooth Mouse application for Android requires;
-1. That GPGGA and GPRMC sentances are present
-2. That the time field (GPGGA and GPRMC) be present
-3. That the date field (GPRMC) be present
-4. The sentence checksum can be wrong or missing
+  The GPS Bluetooth Mouse application for Android requires;
+  1. That GPGGA and GPRMC sentances are present
+  2. That the time field (GPGGA and GPRMC) be present
+  3. That the date field (GPRMC) be present
+  4. The sentence checksum can be wrong or missing
 
-For Memory Map (PC) the above applies but the checksum need to be correct.
+  For Memory Map (PC) the above applies but the checksum need to be correct.
 
-Unfortunately Memory Map will report an GPS communications error if it does not receive data approx every 5 seconds
-The 'data' does not need to be a NMEA sentence it can be replaced with a CR/LF as a keep alive.
+  Unfortunately Memory Map will report an GPS communications error if it does not receive data approx every 5 seconds
+  The 'data' does not need to be a NMEA sentence it can be replaced with a CR/LF as a keep alive.
 
-The combination of Bluetooth GPS mouse and Alpinquest on Android devices is not so fussy.
+  The combination of Bluetooth GPS mouse and Alpinquest on Android devices is not so fussy.
 
-Tested sending serial data to a Bluetooth HC06 on pin Bluetooth_TX, uses SendOnlySoftwareSerial.
+  Tested sending serial data to a Bluetooth HC06 on pin Bluetooth_TX, uses SendOnlySoftwareSerial.
 
-To Do:
-  
+  To Do:
+
 *******************************************************************************************************************************
 */
 
+#define USE_BLUETOOTH                                    //so the rest of the program knows Bluetooth is in use
 
-#include <SendOnlySoftwareSerial.h>
+#ifdef USE_SendOnlySoftwareSerial
+#include <SendOnlySoftwareSerial.h>                      //https://github.com/disq/i2c-gps-nav/blob/master/I2C_GPS_NAV/SendOnlySoftwareSerial.h
 SendOnlySoftwareSerial Bluetooth_Serial (Bluetooth_TX);  // Tx pin
+#endif
 
 char Bluetooth_buff[Bluetooth_Buff_Size];
+
 
 void print_NMEA_Bluetooth(byte lCount)
 {
   //prints payload to Bluetooth port
   byte i, j;
-  
+
   for (i = 0; i <= lCount; i++)
   {
     j = Bluetooth_buff[i];
@@ -66,15 +70,14 @@ void print_NMEA_Terminal(byte lCount)
 {
   //prints payload to console port
   byte i, j;
-  
+
   for (i = 0; i <= lCount; i++)
   {
     j = Bluetooth_buff[i];
     Serial.write(j);
   }
- Serial.println();
+  Serial.println();
 }
-
 
 
 float convert_degrees(float decimaldegrees)
@@ -89,7 +92,7 @@ float convert_degrees(float decimaldegrees)
 }
 
 
-char Hex(char lchar)
+char Hex2(char lchar)
 {
   //used in CRC calculation
   char Table[] = "0123456789ABCDEF";
@@ -119,19 +122,19 @@ byte addChecksum(byte lcount)
 
   for (i = 1; i <= lcount; i++)
   {
-  checksum = checksum ^ Bluetooth_buff[i];
+    checksum = checksum ^ Bluetooth_buff[i];
   }
 
   Bluetooth_buff[lcount++] = '*';
-  Bluetooth_buff[lcount++] = Hex((checksum >> 4) & 15);   //first digit of checksum
-  Bluetooth_buff[lcount] = Hex(checksum & 15);            //last digit of checksum
+  Bluetooth_buff[lcount++] = Hex2((checksum >> 4) & 15);   //first digit of checksum
+  Bluetooth_buff[lcount] = Hex2(checksum & 15);            //last digit of checksum
   return lcount;
 }
 
 
 void send_NMEA(float latfloat, float lonfloat, float alt)
 {
-  //this is the routine called from the main program 
+  //this is the routine called from the main program
   byte checksum, count, i;
   int intalt;
   float latitude, longitude;
@@ -176,15 +179,15 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
   count = strlen(Bluetooth_buff);                            //how long is the array ?
   replaceSpaces(count);                                      //replace spaces with 0s
   count = addChecksum(count);                                //checksum adds characters to array, need to pick up new end value
-  
+
   for (i = 0; i <= 3; i++)
   {
     Bluetooth_Serial.println("Wakeup Bluetooth Mouse!!");
   }
-    
+
   print_NMEA_Bluetooth(count);                               //print the GPGGA
   print_NMEA_Terminal(count);
-  
+
   memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));         //clear array
 
   Serial.print(F("Send NMEA > "));
@@ -209,8 +212,7 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
 
 void Bluetooth_Serial_Setup()
 {
-  Serial.println("Initialise Bluetooth Serial");
-  Bluetooth_Serial.begin(9600);
+  Bluetooth_Serial.begin(BluetoothBaud);
 }
 
 

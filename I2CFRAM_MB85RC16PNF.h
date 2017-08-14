@@ -1,25 +1,24 @@
-//I2CFRAM_Memory1.h
+//I2CFRAM_MB85RC16PNF.h
 /*
-Master Copy 04/06/17
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-This program provides a standard set of memory read and write routines for an I2C FRAM. Tested with Fujitsu MB85RC16PNF.
-  
-To Do:
-  
+  This program provides a standard set of memory read and write routines for an I2C FRAM. Tested with Fujitsu MB85RC16PNF.
+
+  To Do:
+
 
 *******************************************************************************************************************************
 */
@@ -28,26 +27,25 @@ To Do:
 
 const int Memory_I2C_Addr = 0x50;                     //base address of FRAM
 
-
 void Memory_Start()
 {
-Wire.begin();  
-}  
+  Wire.begin();
+}
 
 
 void Memory_End()
 {
-//left empty for future use
+  //left empty for future use
 }
 
 
 /***************************************************************************
- Write Routines
-/***************************************************************************/
+  Write Routines
+  /***************************************************************************/
 
 void Memory_WriteByte(unsigned int addr, byte x)
 {
-  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
@@ -60,24 +58,24 @@ void Memory_WriteByte(unsigned int addr, byte x)
 void Memory_WriteFloat(unsigned int addr, float x)
 {
   byte index, val;
-  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
-    
+
   union
   {
     byte b[4];
     float f;
   } data;
-  
+
   data.f = x;
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
-  
+
   for (index = 0; index < 4; index++)
   {
     val = data.b[index];
-    Wire.write(val);                                   // write the data
+    Wire.write(val);                                   //write the data
   }
 
   Wire.endTransmission();
@@ -87,11 +85,11 @@ void Memory_WriteFloat(unsigned int addr, float x)
 void Memory_WriteInt(unsigned int addr, int x)
 {
 
- byte msb_addr = (highByte(addr) & 0x07);              //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
- byte lsb_addr = lowByte(addr);
- byte msb_data = highByte(x);
- byte lsb_data = lowByte(x);
- 
+  byte msb_addr = (highByte(addr) & 0x07);              //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
+  byte lsb_addr = lowByte(addr);
+  byte msb_data = highByte(x);
+  byte lsb_data = lowByte(x);
+
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
@@ -104,11 +102,11 @@ void Memory_WriteInt(unsigned int addr, int x)
 void Memory_WriteUInt(unsigned int addr, unsigned int x)
 {
 
- byte msb_addr = (highByte(addr) & 0x07);              //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
- byte lsb_addr = lowByte(addr);
- byte msb_data = highByte(x);
- byte lsb_data = lowByte(x);
- 
+  byte msb_addr = (highByte(addr) & 0x07);              //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
+  byte lsb_addr = lowByte(addr);
+  byte msb_data = highByte(x);
+  byte lsb_data = lowByte(x);
+
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
@@ -118,26 +116,23 @@ void Memory_WriteUInt(unsigned int addr, unsigned int x)
 }
 
 
-
-
-
 void Memory_WriteULong(unsigned int addr, unsigned long x)
 {
   byte index, val;
-  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
-    
+
   union
   {
     byte b[4];
     unsigned long f;
   } data;
-  
+
   data.f = x;
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
-  
+
   for (index = 0; index < 4; index++)
   {
     val = data.b[index];
@@ -150,15 +145,15 @@ void Memory_WriteULong(unsigned int addr, unsigned long x)
 
 
 /***************************************************************************
- Read Routines
-/***************************************************************************/
+  Read Routines
+  /***************************************************************************/
 
 byte Memory_ReadByte(unsigned int addr)
 {
   byte data;
-  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
-  
+
   byte val;
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
@@ -166,16 +161,16 @@ byte Memory_ReadByte(unsigned int addr)
   Wire.requestFrom((Memory_I2C_Addr + msb_addr), 1);
   data = Wire.read();
   return data;
-}  
+}
 
 
 int Memory_ReadInt(unsigned int addr)
 {
 
- byte lsb_data, msb_data;
- 
- byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
- byte lsb_addr = lowByte(addr);
+  byte lsb_data, msb_data;
+
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
+  byte lsb_addr = lowByte(addr);
 
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
@@ -184,7 +179,7 @@ int Memory_ReadInt(unsigned int addr)
   Wire.requestFrom(Memory_I2C_Addr + msb_addr, 2);
   lsb_data = Wire.read();
   msb_data = Wire.read();
-  
+
   return (lsb_data + (msb_data * 256));
 }
 
@@ -192,10 +187,10 @@ int Memory_ReadInt(unsigned int addr)
 unsigned int Memory_ReadUInt(unsigned int addr)
 {
 
- byte lsb_data, msb_data;
- 
- byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
- byte lsb_addr = lowByte(addr);
+  byte lsb_data, msb_data;
+
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
+  byte lsb_addr = lowByte(addr);
 
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
@@ -204,7 +199,7 @@ unsigned int Memory_ReadUInt(unsigned int addr)
   Wire.requestFrom(Memory_I2C_Addr + msb_addr, 2);
   lsb_data = Wire.read();
   msb_data = Wire.read();
-  
+
   return (lsb_data + (msb_data * 256));
 }
 
@@ -214,15 +209,15 @@ unsigned int Memory_ReadUInt(unsigned int addr)
 float Memory_ReadFloat(unsigned int addr)
 {
   byte index, val;
-  
-  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
+
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
   Wire.endTransmission();
   Wire.requestFrom(Memory_I2C_Addr + msb_addr, 4);
-    
+
   union
   {
     byte b[4];
@@ -241,9 +236,9 @@ float Memory_ReadFloat(unsigned int addr)
 unsigned long Memory_ReadULong(unsigned int addr)
 {
   byte index, val;
-  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM 
+  byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
-  
+
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
   Wire.endTransmission();
@@ -260,7 +255,7 @@ unsigned long Memory_ReadULong(unsigned int addr)
     val = Wire.read();          // read the byte
     readdata.b[index] = val;
   }
-  
+
   return readdata.f;
 }
 
@@ -273,7 +268,7 @@ unsigned long Memory_ReadULong(unsigned int addr)
 
 unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
 {
-  uint16_t i, CRC;
+  unsigned int i, CRC;
 
   CRC = 0xffff;                                              //start value for CRC16
   byte j;
@@ -292,10 +287,6 @@ unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
   return CRC;
 
 }
-
-
-
-
 
 
 void Memory_Set(unsigned int startaddr, unsigned int endaddr, byte lval)

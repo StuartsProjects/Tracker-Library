@@ -1,9 +1,9 @@
-//SerialGPS_ACK2.h
+//UBLOX_SerialGPS.h
 /*
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 30/07/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
   http://www.LoRaTracker.uk
 
@@ -15,8 +15,8 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This program reads the GPS via serial, can be hardware of softserial. Stores the config settings for UBLOX GPS in Flash to
-  save on RAM memory.
+  This program reads a UBLOX GPS via serial. Uses Flash arrays stored in program memory.
+
 
   To Do:
 
@@ -24,11 +24,11 @@
 */
 
 
-void GPS_GetProcessChar();
+byte GPS_GetByte();
 void GPS_StartRead();
 void GPS_On();
 void GPS_Off();
-boolean GPS_WaitAck(unsigned int waitms, byte length);
+boolean GPS_WaitAck(unsigned long waitms, byte length);
 void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength);
 void GPS_Setup();
 void GPS_ClearConfig();
@@ -49,20 +49,24 @@ byte config_attempts;
 
 boolean GPS_Config_Error;
 
-byte GPS_Reply[GPS_Reply_Size];             //Byte array for storing GPS reply to UBX commands
+byte GPS_Reply[GPS_Reply_Size];             //byte array for storing GPS reply to UBX commands
+
+#include "UBX_Commands.h"                   //arrays that have the command sequences
+#define USE_SERIALGPS                       //so the rest of the program knows serial GPS is in use
+#define UBLOX                               //so the rest of the program knows a UBLOX GPS is in use
 
 
-#include <TinyGPS++.h>
-TinyGPSPlus gps;                              //Create the TinyGPS++ object
-TinyGPSCustom GNGGAFIXQ(gps, "GNGGA", 5);     //custom sentences used to detect possible switch to GLONASS mode
 
-#include "UBX_Commands.h"
-
-
-void GPS_GetProcessChar()                           //get and process output from GPS
+byte GPS_GetByte()                          //get and process output from GPS
 {
-  while (GPSserial.available() > 0)
-  gps.encode(GPSserial.read());
+  if (GPSserial.available() ==  0)
+  {
+    return 0xFF;
+  }
+  else
+  {
+    return GPSserial.read();
+  }
 }
 
 
@@ -97,12 +101,12 @@ void GPS_Off(boolean powercontrol)
   if (powercontrol)
   {
     digitalWrite(GPSPOWER, HIGH);          //force GPS power off
-    
-	#ifdef Use_GPS_SoftwareBackup
-	GPS_SoftwareBackup();
-	#endif
-    
-	GPSoffTime = millis();
+
+#ifdef Use_GPS_SoftwareBackup
+    GPS_SoftwareBackup();
+#endif
+
+    GPSoffTime = millis();
     Serial.print(F("GPSOff at "));
     GPSFixTime = (GPSoffTime - GPSonTime);
     Serial.print(GPSFixTime);
@@ -118,13 +122,12 @@ boolean GPS_WaitAck(unsigned long waitms, byte length)
   byte i, j;
   unsigned long endms;
   endms = millis() + waitms;
-  //Serial.print(F("Wait_Ack "));
   byte ptr = 0;                             //used as pointer to store GPS reply
 
   do
   {
     while (GPSserial.available() > 0)
-    i = GPSserial.read();
+      i = GPSserial.read();
   }
   while ((i != 0xb5) && (millis() < endms));
 
@@ -171,17 +174,17 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
   unsigned int ptr;
 
   config_attempts = attempts;
-  
+
   do
   {
 
     if (config_attempts == 0)
     {
-    Serial.println(F("No Response from GPS"));
-    GPS_Config_Error = true;
-    break;  
+      Serial.println(F("No Response from GPS"));
+      GPS_Config_Error = true;
+      break;
     }
-    
+
     ptr = Progmem_ptr;
 
     for (i = 1; i <= length; i++)
@@ -189,15 +192,14 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
       byteread = pgm_read_byte(ptr++);
 
       GPSserial.write(byteread);
-   
+
     }
-  
+
     if (replylength == 0)
     {
-     Serial.println(F("Reply not required"));
-	 break;
+      Serial.println(F("Reply not required"));
+      break;
     }
-    
 
     config_attempts--;
   } while (!GPS_WaitAck(GPS_WaitAck_mS, replylength));
@@ -225,10 +227,10 @@ boolean GPS_CheckNavigation()
   GPS_PollNavigation();
 
   j = GPS_Reply[7];
-  
+
   Serial.print(F("Dynamic Model "));
   Serial.println(j);
-  
+
   if (GPS_Reply[7] != 6)
   {
     Serial.println(F("Dynamic Model 6 not Set !"));
@@ -253,7 +255,6 @@ void GPS_SetGPMode()
   Serial.print(F("GPS GLONASS_Off "));
   GPS_Send_Config((unsigned int) GLONASS_Off.access(), GLONASS_Off.count(), 10, GPS_attempts);
 }
-
 
 
 void GPS_StopMessages()
@@ -302,11 +303,11 @@ void GPS_SetCyclicMode()
 
 void GPS_SoftwareBackup()
 {
-  
+
   Serial.print(F("GPS SoftwareBackup "));
   GPS_Send_Config((unsigned int) SoftwareBackup.access(), SoftwareBackup.count(), 0, GPS_attempts);
   Serial.println();
-  
+
 }
 
 

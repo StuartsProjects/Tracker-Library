@@ -1,32 +1,25 @@
-//Receiver2_Definitions.h
-
+//Receiver2_Board_Definitions.h
 /*
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-For boards; LoRaTrackerHAB1, LoRaTracker_Locator1, PIHTracker3, PIHTracker2, LoRaTracker_Relay1, LoRaTracker_Receiver1 (1284P),
-MikrobusShieldV3, MikrobusShield2560,
-  
-To Do:
-  
+  This is the hardware definitions for the Receiver2 board, based on the ATMEGA 1284P
+
+  To Do:
+
 *******************************************************************************************************************************
-
-/*
-**************************************************************************************************
-  LoRa Static definitions
-**************************************************************************************************
 */
 
 
@@ -66,9 +59,9 @@ To Do:
 #define MB1_RESET A4
 #define DISP_CS A5
 #define SWITCH2 A6
-#define SWITCH_U A6          
+#define SWITCH_U A6
 #define MB1_INT  A7
-#define ADMultiplier 10       
+#define ADMultiplier 10
 
 #define GPSPOWER -1           //not used
 #define LED3 13               //LED on SCK Pin
@@ -79,16 +72,13 @@ To Do:
 
 #ifdef GPS_in_MB1
 #define GPSTX 25
-#define GPSTX 24
-#include <NeoSWSerial.h>              //more relaible at GPS init than software serial  
-NeoSWSerial GPSserial(GPSRX, GPSTX);
-
+#define GPSRX 24
 #endif
 
 #ifdef GPS_in_MB2
 #define GPSserial Serial1
 #define GPSTX 3
-#define GPSTX 2
+#define GPSRX 2
 #endif
 
 #ifdef LoRa_Device_in_MB1       //if the LoRa device is in MB1

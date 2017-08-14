@@ -1,28 +1,27 @@
 //FSK_RTTY2.h
 
 /*
-Master Copy 04/06/17
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-Used with the LoRa device in FSK RTTY mode to send data as upper sideband FSK RTTY at 100 or 200 baud, 7 bit, 1 start bit, 
-2 stop bits and no parity. Frequency shift is 366Hz, 6 frequency steps for the LoRa device. The shift is passed to the 
-start_FSKRTTY() function.
-  
-To Do:
-  
+  Used with the LoRa device in FSK RTTY mode to send data as upper sideband FSK RTTY at 100 or 200 baud, 7 bit, 1 start bit,
+  2 stop bits and no parity. Frequency shift is 366Hz, 6 frequency steps for the LoRa device. The shift is passed to the
+  start_FSKRTTY() function.
+
+  To Do:
+
 *******************************************************************************************************************************
 */
 
@@ -47,7 +46,7 @@ void Send_FSKRTTY(byte chartosend)
   byte numbits;
   byte test;
   Serial.write(chartosend);                   //send character to serial terminal for display
-  digitalWrite(LED1, LOW);                      
+  digitalWrite(LED1, LOW);
   FSK_RTTY_Low();                             //send a 0 bit, 366hz shift, low
   delayMicroseconds(ramc_FSKRTTYbaudDelay);   //delay for 1 bit at baud rate,start bit
 
@@ -105,14 +104,14 @@ void start_FSKRTTY(byte Regshift)
   ShiftM = NoShiftM;
   ShiftL = NoShiftL;
 
-  #ifdef DEBUG
+#ifdef DEBUG
   Serial.print(F("FSK NoShift Registers "));
   Serial.print(NoShiftH, HEX);
   Serial.print(F(" "));
   Serial.print(NoShiftM, HEX);
   Serial.print(F(" "));
   Serial.println(NoShiftL, HEX);
-  #endif
+#endif
 
   j = NoShiftL + Regshift;
 

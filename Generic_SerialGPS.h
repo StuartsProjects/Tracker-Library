@@ -1,9 +1,9 @@
-//SerialGPS_ACK2.h
+//Generic_SerialGPS.h
 /*
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 30/07/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
   http://www.LoRaTracker.uk
 
@@ -15,8 +15,7 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This program reads the GPS via serial, can be hardware of softserial. Stores the config settings for UBLOX GPS in Flash to
-  save on RAM memory.
+  This program reads the GPS via serial, can be hardware of softserial.
 
   To Do:
 
@@ -53,14 +52,14 @@ byte GPS_Reply[GPS_Reply_Size];             //Byte array for storing GPS reply t
 
 
 #include <TinyGPS++.h>
-TinyGPSPlus gps;                              //Create the TinyGPS++ object
+TinyGPSPlus gps;                            //Create the TinyGPS++ object
 
 
 
-void GPS_GetProcessChar()                           //get and process output from GPS
+void GPS_GetProcessChar()                   //get and process output from GPS
 {
   while (GPSserial.available() > 0)
-  gps.encode(GPSserial.read());
+    gps.encode(GPSserial.read());
 }
 
 
@@ -95,12 +94,12 @@ void GPS_Off(boolean powercontrol)
   if (powercontrol)
   {
     digitalWrite(GPSPOWER, HIGH);          //force GPS power off
-    
-	#ifdef Use_GPS_SoftwareBackup
-	GPS_SoftwareBackup();
-	#endif
-    
-	GPSoffTime = millis();
+
+#ifdef Use_GPS_SoftwareBackup
+    GPS_SoftwareBackup();
+#endif
+
+    GPSoffTime = millis();
     Serial.print(F("GPSOff at "));
     GPSFixTime = (GPSoffTime - GPSonTime);
     Serial.print(GPSFixTime);
@@ -122,17 +121,17 @@ void GPS_Send_Config(unsigned long Progmem_ptr, byte length, byte replylength, b
   unsigned long ptr;
 
   config_attempts = attempts;
-  
+
   do
   {
 
     if (config_attempts == 0)
     {
-    Serial.println(F("No Response from GPS"));
-    GPS_Config_Error = true;
-    break;  
+      Serial.println(F("No Response from GPS"));
+      GPS_Config_Error = true;
+      break;
     }
-    
+
     ptr = Progmem_ptr;
 
     for (i = 1; i <= length; i++)
@@ -140,15 +139,13 @@ void GPS_Send_Config(unsigned long Progmem_ptr, byte length, byte replylength, b
       byteread = pgm_read_byte(ptr++);
 
       GPSserial.write(byteread);
-   
     }
-  
+
     if (replylength == 0)
     {
-     Serial.println(F("Reply not required"));
-	 break;
+      Serial.println(F("Reply not required"));
+      break;
     }
-    
 
     config_attempts--;
   } while (!GPS_WaitAck(GPS_WaitAck_mS, replylength));
@@ -166,55 +163,55 @@ void GPS_Setup()
 
 boolean GPS_CheckNavigation()
 {
-    return true;
+  //null routine, in case a program uses the same routine for a UBLOX GPS
+  return true;
 }
 
 
 void GPS_ClearConfig()
 {
-  
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 
 void GPS_SetGPMode()
 {
- 
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 
 
 void GPS_StopMessages()
 {
-
-}  
+  //null routine, in case a program uses the same routine for a UBLOX GPS
+}
 
 void GPS_SetNavigation()
 {
-  
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 
 void GPS_SaveConfig()
 {
- 
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 
 void GPS_PollNavigation()
 {
- 
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 
 void GPS_SetCyclicMode()
 {
- 
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 void GPS_SoftwareBackup()
 {
-    
-  
+  //null routine, in case a program uses the same routine for a UBLOX GPS
 }
 
 

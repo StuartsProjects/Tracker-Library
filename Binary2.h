@@ -1,26 +1,26 @@
- //Binary2.h
+//Binary2.h
 /*
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-This program writes and reads variables to and from the buffer address passed. It is normally used together with the LoRa 
-TX and RX buffers.
+  This program writes and reads variables to and from the buffer address passed. It is normally used together with the LoRa
+  TX and RX buffers.
 
-  
-To Do:
- 
+
+  To Do:
+
 *******************************************************************************************************************************
 */
 
@@ -35,6 +35,7 @@ void Write_Int(byte addr, int x,  byte localbuff[])
   localbuff[addr] = lowByte(x);
   localbuff[addr + 1] = highByte(x);
 }
+
 
 void Write_UInt(byte addr, unsigned int x,  byte localbuff[])
 {
@@ -54,7 +55,6 @@ void Write_Float(byte addr, float x,  byte localbuff[])
   } data;
   data.f = x;
 
-
   for (i = 0; i < 4; i++)
   {
     j = data.b[i];
@@ -69,7 +69,7 @@ byte Read_Byte(byte addr, byte localbuff[])
 }
 
 
-float Read_Float(unsigned int addr, byte localbuff[])
+float Read_Float(byte addr, byte localbuff[])
 {
   byte i, j;
 

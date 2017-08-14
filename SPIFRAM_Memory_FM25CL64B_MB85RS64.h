@@ -1,25 +1,25 @@
 //SPIFRAM_Memory_FM25CL64B_MB85RS64.h
 /*
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 08/08/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-This program provides a standard set of memory read and write routines for a SPI FRAM. Tested with Cypress  and 
-Fujitsu MB85RS64.
-  
-To Do:
-  
+  This program provides a standard set of memory read and write routines for a SPI FRAM. Tested with Cypress FM25CL64B and
+  Fujitsu MB85RS64.
+
+  To Do:
+
 *******************************************************************************************************************************
 */
 
@@ -36,13 +36,13 @@ const byte Memory_RDID   = 0b10011111;    //Read Device ID
 
 void Memory_Start()
 {
-//left empty for future use
-}  
+  //left empty for future use
+}
 
 
 void Memory_End()
 {
-//left empty for future use
+  //left empty for future use
 }
 
 
@@ -76,7 +76,7 @@ byte Memory_ReadStatus()
 }
 
 
-void Memory_WriteByte(unsigned int addr, byte lvar1)
+void Memory_WriteByte(unsigned int addr, byte x)
 {
   //write a byte to the FRAM
   byte msb, lsb;
@@ -89,16 +89,15 @@ void Memory_WriteByte(unsigned int addr, byte lvar1)
   SPI.transfer(Memory_WRITE);            //OP code for write data byte
   SPI.transfer(msb);                     //write the MSB Address
   SPI.transfer(lsb);                     //write the LSB Address
-  SPI.transfer(lvar1);                   //write the data
+  SPI.transfer(x);                       //write the data
   digitalWrite(MEMORY_CS, HIGH);         //set CS high
   Memory_DisableWrite();
 }
 
 
-void Memory_WriteInt(int addr, int x)
+void Memory_WriteInt(unsigned int addr, int x)
 {
   //This writes signed or unsigned ints
-  //Serial.println(F("Write Uint"));
   byte msb, lsb;
 
   msb = highByte(addr);
@@ -115,12 +114,11 @@ void Memory_WriteInt(int addr, int x)
   Memory_DisableWrite();
 }
 
- 
+
 
 void Memory_WriteUInt(unsigned int addr, unsigned int x)
 {
   //This writes signed or unsigned ints
-  //Serial.println(F("Write Uint"));
   byte msb, lsb;
 
   msb = highByte(addr);
@@ -374,11 +372,6 @@ void Config_Memory_Print()
     Serial.println();
   }
 
-  CRC = Memory_CRC(addr_StartBindData, addr_EndBindData);
-  Serial.print(F("Memory CRC 0x"));
-  Serial.println(CRC, HEX);
-  Serial.println();
-  
 }
 
 

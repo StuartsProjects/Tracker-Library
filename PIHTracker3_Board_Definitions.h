@@ -1,32 +1,26 @@
-//Program_Definitions.h
+//PIHTracker3_Board_Definitions.h
 
 /*
 *******************************************************************************************************************************
-Easy Build LoRaTracker Programs for Arduino
+  Easy Build LoRaTracker Programs for Arduino
 
-Copyright of the author Stuart Robinson - 04/06/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
-http://www.LoRaTracker.uk
+  http://www.LoRaTracker.uk
 
-These programs may be used free of charge for personal, recreational and educational purposes only.
+  These programs may be used free of charge for personal, recreational and educational purposes only.
 
-This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
-of the author Stuart Robinson.
+  This program, or parts of it, may not be used for or in connection with any commercial purpose without the explicit permission
+  of the author Stuart Robinson.
 
-The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
-free from errors.
+  The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
+  free from errors.
 
-For boards; LoRaTrackerHAB1, LoRaTracker_Locator1, PIHTracker3, PIHTracker2, LoRaTracker_Relay1, LoRaTracker_Receiver1 (1284P),
-MikrobusShieldV3, MikrobusShield2560,
-  
-To Do:
-  
+  Hardware definitions for the PIHTracker3 board.
+
+  To Do:
+
 *******************************************************************************************************************************
-
-/*
-**************************************************************************************************
-  LoRa Static definitions
-**************************************************************************************************
 */
 
 
@@ -34,7 +28,7 @@ To Do:
 #define Audio_Out 3                  //pin number for external tone generation
 #define lora_TonePin 4               //pin number for radio tone generation, connects to LoRa device pin DIO2
 #define WDI 5                        //pin for using a watchdog device
-#define Switch1 6                    //pin for switch input
+#define SWITCH1 6                    //pin for switch input
 #define lora_NSS 8                   //pin number where the NSS line for the LoRa device is connected
 #define lora_NReset 9                //pin where LoRa device reset line is connected
 #define LED1 10                      //pin number for LED on Tracker
@@ -50,8 +44,11 @@ To Do:
 #define SupplyAD A0                   //pin for supply AD
 #define TimePulse 3                   //For reading the GPS timepulse signal
 
-#define GPSBaud 9600                  //GPS baud rate
 #define ADMultiplier 10               //multiplier for supply volts calculation
 
-#include <NeoSWSerial.h>              //more relaible at GPS init than software serial  
-NeoSWSerial GPSserial(GPSRX, GPSTX);
+#define DISP_CS -1                    //pin not used 
+#define DISP_RESET -1                 //pin not used 
+#define DISP_DC -1                    //pin not used 
+#define Bluetooth_TX -1               //pin not used 
+
+
