@@ -4,7 +4,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -30,6 +30,7 @@
 #define lora_DIO1 5                  //pin connected to DIO1 on LoRa device
 #define lora_DIO2 6                  //pin connected to DIO2 on LoRa device
 #define lora_TonePin 6               //pin number for radio tone generation, connects to LoRa device pin DIO2
+#define Audio_Out 6                  //pin number for Audio tone generation (AFSK) may be same as LoRa tone pin 
 #define lora_DIO4 7                  //pin connected to DIO4 on LoRa device
 #define LED1 8                       //pin number for LED on Tracker
 #define WDI 8                        //pin for using a watchdog device
@@ -48,6 +49,5 @@
 #define DisplayTX -1                  //unused pin
 #define MEMORY_CS -1                  //unused pin          
 
-#define GPSBaud 9600                  //GPS baud rate
 #define ADMultiplier 10               //multiplier for supply volts calculation
 

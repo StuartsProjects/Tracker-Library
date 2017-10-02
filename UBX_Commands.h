@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -16,9 +16,8 @@
   free from errors.
 
   This is a series of commnands for the UBLOX GPS that are stored in program Flash rather than using valuable RAM memory. The
-  commands are padded to an even number of bytes by adding a zero at the end if needed. This does not affect the actual command
-  but when I2C is in use there needs to be at least 2 writes at a time.
-
+  commands are padded to an even number of bytes by adding a zero at the end if needed.
+  
   To Do:
 
 *******************************************************************************************************************************
@@ -50,3 +49,5 @@ FLASH_ARRAY(byte, SetCyclicMode, 0xB5, 0x62, 0x06, 0x11, 0x02, 0x00, 0x08, 0x01,
 FLASH_ARRAY(byte, SoftwareBackup, 0xB5, 0x62, 0x06, 0x57, 0x08, 0x00, 0x01, 0x00, 0x00, 0x00, 0x50, 0x4B, 0x43, 0x42, 0x86, 0x46);  //16
 
 FLASH_ARRAY(byte, EnableI2C,  0xB5, 0x62, 0x06, 0x00, 0x14, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24, 0x92); //28
+
+FLASH_ARRAY(byte, PMREQBackup, 0xB5, 0x62, 0x02, 0x41, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x4D, 0x3B);  //16 

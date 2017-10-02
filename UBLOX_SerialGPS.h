@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -18,7 +18,7 @@
   This program reads a UBLOX GPS via serial. Uses Flash arrays stored in program memory.
 
 
-  To Do:
+  To Do:   
 
 *******************************************************************************************************************************
 */
@@ -40,19 +40,14 @@ void GPS_PollNavigation();
 boolean GPS_CheckNavigation();
 void GPS_SetCyclicMode();
 void GPS_SoftwareBackup();
+void GPS_PMREQBackup();
+void GPS_LowCurrent();
 
-unsigned long GPSonTime;
-unsigned long GPSoffTime;
-unsigned long GPSFixTime;
-
-byte config_attempts;
-
-boolean GPS_Config_Error;
 
 byte GPS_Reply[GPS_Reply_Size];             //byte array for storing GPS reply to UBX commands
-
+  
 #include "UBX_Commands.h"                   //arrays that have the command sequences
-#define USE_SERIALGPS                       //so the rest of the program knows serial GPS is in use
+#define USING_SERIALGPS                       //so the rest of the program knows serial GPS is in use
 #define UBLOX                               //so the rest of the program knows a UBLOX GPS is in use
 
 
@@ -81,13 +76,12 @@ void GPS_On(boolean powercontrol)
   //turns on the GPS
   //has to deal with software power control (UBLOX) and hardware power control, for tracker boards with that option
   Serial.println(F("GPSOn"));
-  GPSonTime = millis();
   GPSserial.begin(GPSBaud);
 
   if (powercontrol)
   {
-    digitalWrite(GPSPOWER, LOW);           //force GPS power on
-    GPSserial.println();                   //wakeup gps, in case software power down is in use
+    digitalWrite(GPSPOWER, LOW);          //force GPS power on, if its not in use has no effect
+    GPSserial.write(0);                   //wakeup gps, in case software power down is in use
   }
 }
 
@@ -100,19 +94,20 @@ void GPS_Off(boolean powercontrol)
 
   if (powercontrol)
   {
-    digitalWrite(GPSPOWER, HIGH);          //force GPS power off
 
-#ifdef Use_GPS_SoftwareBackup
-    GPS_SoftwareBackup();
+#ifdef Remove_GPS_Power
+    digitalWrite(GPSPOWER, HIGH);          //force GPS power off
 #endif
 
-    GPSoffTime = millis();
-    Serial.print(F("GPSOff at "));
-    GPSFixTime = (GPSoffTime - GPSonTime);
-    Serial.print(GPSFixTime);
-    Serial.println(F("mS"));
+#ifdef Use_GPS_SoftwareBackup
+    GPS_PMREQBackup();
+    GPS_LowCurrent();
+#endif
+
   }
+
   GPSserial.end();
+  
 }
 
 
@@ -123,7 +118,7 @@ boolean GPS_WaitAck(unsigned long waitms, byte length)
   unsigned long endms;
   endms = millis() + waitms;
   byte ptr = 0;                             //used as pointer to store GPS reply
-
+  
   do
   {
     while (GPSserial.available() > 0)
@@ -173,7 +168,7 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
   byte byteread, i;
   unsigned int ptr;
 
-  config_attempts = attempts;
+  byte config_attempts = attempts;
 
   do
   {
@@ -204,7 +199,7 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
     config_attempts--;
   } while (!GPS_WaitAck(GPS_WaitAck_mS, replylength));
 
-  delay(100);                                         //GPS can sometimes be a bit slow getting ready for next config
+  delay(50);                                         //GPS can sometimes be a bit slow getting ready for next config
 }
 
 
@@ -228,10 +223,10 @@ boolean GPS_CheckNavigation()
 
   j = GPS_Reply[7];
 
-  Serial.print(F("Dynamic Model "));
+  Serial.print(F("Dynamic Model is "));
   Serial.println(j);
 
-  if (GPS_Reply[7] != 6)
+  if (j != 6)
   {
     Serial.println(F("Dynamic Model 6 not Set !"));
     return false;
@@ -268,8 +263,10 @@ void GPS_StopMessages()
   Serial.print(F("GPS GPGSA_Off "));
   GPS_Send_Config((unsigned int) GPGSA_Off.access(), GPGSA_Off.count(), 10, GPS_attempts);
 
+  #ifndef GPS_ALLOW_GPGSV
   Serial.print(F("GPS GPGSV_Off "));
   GPS_Send_Config((unsigned int) GPGSV_Off.access(), GPGSV_Off.count(), 10, GPS_attempts);
+  #endif
 }
 
 
@@ -298,19 +295,24 @@ void GPS_SetCyclicMode()
 {
   Serial.print(F("GPS SetCyclic "));
   GPS_Send_Config((unsigned int) SetCyclicMode.access(), SetCyclicMode.count(), 10, GPS_attempts);
-  Serial.println();
 }
 
 void GPS_SoftwareBackup()
 {
-
   Serial.print(F("GPS SoftwareBackup "));
   GPS_Send_Config((unsigned int) SoftwareBackup.access(), SoftwareBackup.count(), 0, GPS_attempts);
-  Serial.println();
-
 }
 
 
+void GPS_PMREQBackup()
+{
+  Serial.print(F("GPS PMREQBackup "));
+  GPS_Send_Config((unsigned int) PMREQBackup.access(), PMREQBackup.count(), 0, GPS_attempts);
+}
 
-
+void GPS_LowCurrent()
+{
+pinMode(GPSTX, INPUT);           //GPS Output pin
+pinMode(GPSRX, INPUT);           //GPS Input pin
+}
 

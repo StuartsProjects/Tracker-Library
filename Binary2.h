@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 

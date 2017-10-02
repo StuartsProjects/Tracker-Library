@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -34,9 +34,13 @@ const byte Memory_WRITE  = 0b0010;        //Write Memory
 const byte Memory_RDID   = 0b10011111;    //Read Device ID
 
 
+#include <SPI.h>
+
+
 void Memory_Start()
 {
-  //left empty for future use
+  pinMode(MEMORY_CS, OUTPUT);             //for FRAM CS
+  digitalWrite(MEMORY_CS, HIGH);          //set CS high
 }
 
 
@@ -363,7 +367,7 @@ void Config_Memory_Print()
     {
       memory_Ldata = Memory_ReadByte(memory_Laddr);
       if (memory_Ldata < 0x10) {
-        Serial.print("0");
+        Serial.print(F("0"));
       }
       Serial.print(memory_Ldata, HEX);                //print the register number
       Serial.print(F(" "));
@@ -385,5 +389,34 @@ void Memory_Set(unsigned int startaddr, unsigned int endaddr, byte lval)
 }
 
 
+
+void Print_Memory(uint16_t start_addr, uint16_t end_addr)
+{
+  //print the contents of Memory
+  byte data;
+  unsigned int i;
+   
+  uint8_t value;
+  for (uint16_t a = start_addr; a <= end_addr; a++) 
+  {
+    value = Memory_ReadByte(a);
+    if ((a % 16) == 0) 
+    {
+      Serial.print(F("\n 0x")); 
+      if (a < 0x10) 
+      {
+       Serial.print('0');
+      }
+      Serial.print(a, HEX); 
+      Serial.print(F(": "));
+    }
+    Serial.print(F("0x")); 
+    if (value < 0x10) 
+      Serial.print('0');
+    Serial.print(value, HEX); 
+    Serial.print(F(" "));
+  }
+  Serial.println();
+}
 
 

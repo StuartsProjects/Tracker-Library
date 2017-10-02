@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 2/10/17
+  Copyright of the author Stuart Robinson - 14/08/17
 
   http://www.LoRaTracker.uk
 
@@ -20,6 +20,7 @@
   To Do:
 
 
+
 *******************************************************************************************************************************
 */
 
@@ -32,7 +33,7 @@ const byte BW20800 = 48;        //20.8khz
 const byte BW31200 = 64;        //31.2khz
 const byte BW41700 = 80;        //41.7khz
 const byte BW62500 = 96;        //62.5khz
-const byte BW125000 = 112;      //125khz
+const byte BW12500 = 112;       //125khz
 const byte BW250000 = 128;      //250khz
 const byte BW500000 = 144;      //500khz
 
@@ -351,7 +352,7 @@ void lora_TXOFF()
   Serial.print(temp);
   Serial.println(F("mS"));
 #endif
-  lora_TXTime = (millis() - lora_StartTXTime);
+  lora_TXTime = lora_TXTime + (millis() - lora_StartTXTime);
 }
 
 
@@ -369,9 +370,9 @@ void lora_Tone(int ToneFrequency, int ToneLength, int TXPower)
   lora_DirectSetup();
   lora_Write(lora_RegFdevLsb, Deviation);     //We are generating a tone so set the deviation, 5kHz
   lora_TXONDirect(TXPower);
-  tone(lora_TonePin, ToneFrequency);
+  //tone(lora_TonePin, ToneFrequency);
   delay(ToneLength);
-  noTone(lora_TonePin);
+  //noTone(lora_TonePin);
   pinMode(lora_TonePin, INPUT);
   lora_TXOFF();
 }
@@ -798,7 +799,7 @@ byte lora_QueuedSend(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char T
 
     lora_Send(TXBuffStart, TXBuffEnd, TXPacketType, TXDestination, TXSource, TXTimeout, TXPower, StripAddress);
 
-    if (lora_waitPacket(ACK, 5) == 1)               //when returns the value of lora_RXPacketType may be updated
+    if (lora_waitPacket(ACK, 5) == 1)          //when returns the value of lora_RXPacketType may be updated
     {
       return 1;
     }
@@ -809,7 +810,7 @@ byte lora_QueuedSend(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char T
       Serial.println(F("Serial in ?"));
 #endif
       keypress = 1;
-      while (Serial.read() != -1);                  //clear serial input buffer
+      while (Serial.read() != -1);             //clear serial input buffer
       return 0;
     }
 

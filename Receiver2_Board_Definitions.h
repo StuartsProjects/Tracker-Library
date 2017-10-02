@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -48,9 +48,11 @@
 #define MB2_INT 28
 #define MB1_INT2 29
 #define MB1_PWM  30           //same as LED2
+#define Audio_Out 30
 #define LED2  30              //hardware pin 18 
 #define LED1 31               //hardware pin 21
 #define WDI 31
+
 
 #define SupplyAD  A0
 #define MB1_AN A1

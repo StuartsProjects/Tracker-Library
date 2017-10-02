@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -21,6 +21,19 @@
 */
 
 #include <EEPROM.h>
+
+
+void Memory_Start()
+{
+ //left empty for future use
+}
+
+
+void Memory_End()
+{
+ //left empty for future use 
+}
+
 
 
 void Memory_WriteByte(unsigned int addr, byte x)

@@ -4,7 +4,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -43,15 +43,19 @@
 
 #define SupplyAD  A0                 //measure supply voltage here
 #define MB1_AN A1
+#define DISPLAYTX A1                 //for driving serial displays
 #define MB2_TX  A2
 #define MB2_RX  A3
-#define SDA
-#define SCL
+#define SDA A4
+#define SCL A5
 
 #define ADMultiplier 10              //multiplier for supply volts calculation
 
+#define Bluetooth_RX  A3
+#define Bluetooth_TX  A2
 
 #ifdef GPS_in_MB2
+
 #define GPSTX MB2_TX
 #define GPSRX MB2_RX
 
@@ -60,6 +64,7 @@
 
 #ifdef LoRa_Device_in_MB1            //if the LoRa device is in MB1
 #define lora_TonePin MB1_PWM
+#define Audio_Out MB1_PWM            //pin number for Audio tone generation (AFSK) may be same as LoRa tone pin
 #define lora_NReset MB1_RESET
 #define lora_NSS MB1_CS
 #define lora_DIO0 MB1_INT

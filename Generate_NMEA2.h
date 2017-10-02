@@ -35,6 +35,8 @@
   The combination of Bluetooth GPS mouse and Alpinquest on Android devices is not so fussy.
 
   Tested sending serial data to a Bluetooth HC06 on pin Bluetooth_TX, uses SendOnlySoftwareSerial.
+  
+  This version of the NMEA Generator uses the lora_RXBuff for sending to reduce the memory requirement
 
   To Do:
 
@@ -43,7 +45,7 @@
 
 #define USING_BLUETOOTH                                    //so the rest of the program can know if Bluetooth is in use
 
-char Bluetooth_buff[Bluetooth_Buff_Size];
+#define Bluetooth_buff lora_RXBUFF
 
 void print_NMEA_Bluetooth(byte lCount)
 {
@@ -158,7 +160,7 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
 
   memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));        //clear array
 
-  Serial.print(F("Send NMEA > "));
+  Serial.println(F("Send NMEA"));
 
   snprintf(Bluetooth_buff,
            Bluetooth_Buff_Size,
@@ -174,17 +176,17 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
   replaceSpaces(count);                                      //replace spaces with 0s
   count = addChecksum(count);                                //checksum adds characters to array, need to pick up new end value
 
-  for (i = 0; i <= 3; i++)
+  for (i = 1; i <= 2; i++)
   {
-    Bluetooth_Serial.println("Wakeup Bluetooth Mouse!!");
+   Bluetooth_Serial.println("Wakeup Bluetooth Mouse!!");
   }
 
   print_NMEA_Bluetooth(count);                               //print the GPGGA
-  print_NMEA_Terminal(count);
+  //print_NMEA_Terminal(count);
 
   memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));         //clear array
 
-  Serial.print(F("Send NMEA > "));
+  //Serial.print(F("Send NMEA > "));
 
   snprintf(Bluetooth_buff,
            Bluetooth_Buff_Size,
@@ -200,7 +202,7 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
   replaceSpaces(count);                                       //replacespaces with 0s
   count = addChecksum(count);                                 //checksum adds characters to array, need to pick up new end value
   print_NMEA_Bluetooth(count);                                //print the GPRMC
-  print_NMEA_Terminal(count);
+  //print_NMEA_Terminal(count);
 }
 
 

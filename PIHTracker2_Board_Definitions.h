@@ -34,22 +34,22 @@
 #define LED1 10                      //pin number for LED on Tracker
 #define LED2 13                      //pin number for standard LED on pin 13 of Pro Mini
 
-#define GPSPOWER 7                   //pin controls power to GPS
-#define GPSBACKUP A1                 //use for GPS backup power
-#define CON2_1 A1                    //connected to CON2 pin 1 on external header
-#define GPSTX A2                     //pin number for TX output - RX into GPS
-#define GPSRX A3                     //pin number for RX input - TX from GPS
-#define RCPulse A4                   //pin used to read RC pulse
-#define DisplayTX A5                 //soft serial TX pin for Digole Serial LCD
-#define SupplyAD A0                  //pin for supply AD
-#define TimePulse 3                  //For reading the GPS timepulse signal
+#define GPSPOWER A0                   //pin controls power to GPS
+#define GPSBACKUP A1                  //use for GPS backup power
+#define CON2_1 A1                     //connected to CON2 pin 1 on external header
+#define GPSTX A2                      //pin number for TX output - RX into GPS
+#define GPSRX A3                      //pin number for RX input - TX from GPS
+#define RCPulse A4                    //pin used to read RC pulse
+#define DisplayTX A5                  //soft serial TX pin for Digole Serial LCD
+#define SupplyAD A7                   //pin for supply AD
 
-#define ADMultiplier 10              //multiplier for supply volts calculation
+#define ADMultiplier 10               //multiplier for supply volts calculation
 
-#define DISP_CS -1                   //pin not used 
-#define DISP_RESET -1                //pin not used 
-#define DISP_DC -1                   //pin not used 
-#define Bluetooth_TX -1              //pin not used 
+#define DISP_CS -1                    //pin not used 
+#define DISP_RESET -1                 //pin not used 
+#define DISP_DC -1                    //pin not used 
+#define Bluetooth_TX -1               //pin not used 
 
 #define Bluetooth_RX  A3
 #define Bluetooth_TX  A2
+

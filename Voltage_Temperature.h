@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -16,7 +16,7 @@
   free from errors.
 
   This Program uses either and external voltage divider and temperature sensor  or  some internal processor 'tricks' to read the
-  CPU supply voltage and temperature, needs calibrating for each particular CPU.
+  CPU supply voltage and temperature, each particular CPU needs calibrating.
 
   To Do:
 

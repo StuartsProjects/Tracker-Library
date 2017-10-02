@@ -1,31 +1,34 @@
-This repository contains the library programs (.h) files required by the various LoRaTracker.
+This repository contains the library programs (.h) files required by the various LoRaTracker programs.
 
-
-The library files need to be accessible to the Arduino IDE at program compile time, there are two ways
+The library files need to be accessible to the Arduino IDE at program compile time, there are three ways
 to achieve this;
 
 
-1. In the Arduino libraries folder create a folder called 'LoRaTracker' and place all the files in there. 
+1. Create a 'LoRaTracker' folder in your \users\Arduino\libraries folder, mine is located here on a Windows 7 PC;
 
-   For instance I have my Arduino installation on a seperate drive (Y:) so I would create this folder;
+   C:\Users\Admin\Documents\Arduino\libraries\LoRaTracker
+   
+   And copy all the LoRaTracker library files there.  
 
-   Y:\Arduino\Libraries\LoRaTracker
+2. For a seperate Arduino installation create a folder called 'LoRaTracker' and place all the files in there. 
 
+   For instance I have my own Arduino installation on a separate drive (Y:) so I would create this folder;
 
-
-2. Copy all the library files into the same folder as the programs .ino file. For example I have 
-   a receiver program here;
-
-   Y:\Projects\Receiver2\LoRaTracker_Receiver2_160717.ino
-
-   So I would need to copy all the library files into the Y:\Projects\Receiver2\ folder.
+   Y:\Arduino\libraries\LoRaTracker
 
 
+3. Copy all the library files into the same folder as the programs .ino file. For example on my own PC I have 
+   a HAB tracker program here;
 
-Myself, I prefer to use option 1, then I can be sure that any updates to the Library files are common
-to all programs. 
+   Y:\Projects\HAB2\LoRaTracker_HAB2_011017.ino
+
+   So I would need to copy all the library files into the Y:\Projects\HAB2\ folder, or you could copy just the
+   ones you need. 
+
+
+Myself, I prefer to use option 2, then I can be sure that any updates to the Library files are common to all programs. 
 
 
 
 Stuart Robinson
-August 2017
+October 2017

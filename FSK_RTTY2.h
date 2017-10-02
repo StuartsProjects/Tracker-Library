@@ -4,7 +4,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -25,8 +25,8 @@
 *******************************************************************************************************************************
 */
 
-void Send_FSKRTTY(byte chartosend);
-void start_FSKRTTY();
+void Send_FSKRTTY(byte chartosend, unsigned int local_FSKRTTYbaudDelay);
+void Start_FSKRTTY(byte local_Regshift, unsigned int local_FSKRTTYleadin, byte local_FSKRTTYpips);
 void FSK_RTTY_Low();
 void FSK_RTTY_High();
 
@@ -37,18 +37,19 @@ byte ShiftL;                                  //high value of frequency register
 byte NoShiftH;                                //high value of frequency register for unshifted FSK RTTY
 byte NoShiftM;                                //high value of frequency register for unshifted FSK RTTY
 byte NoShiftL;                                //high value of frequency register for unshifted FSK RTTY
+            
 
-
-void Send_FSKRTTY(byte chartosend)
+void Send_FSKRTTY(byte chartosend, unsigned int local_FSKRTTYbaudDelay)
 //send the byte in chartosend as FSK RTTY, assumes mark condition (idle) is already present
 //format is 7 bits, no parity and 2 stop bits
 {
   byte numbits;
   byte test;
+  
   Serial.write(chartosend);                   //send character to serial terminal for display
   digitalWrite(LED1, LOW);
   FSK_RTTY_Low();                             //send a 0 bit, 366hz shift, low
-  delayMicroseconds(ramc_FSKRTTYbaudDelay);   //delay for 1 bit at baud rate,start bit
+  delayMicroseconds(local_FSKRTTYbaudDelay);  //delay for 1 bit at baud rate,start bit
 
   for (numbits = 1;  numbits <= 7; numbits++) //send 7 bits, LSB first
   {
@@ -64,12 +65,12 @@ void Send_FSKRTTY(byte chartosend)
     }
 
     chartosend = (chartosend / 2);             //get the next bit
-    delayMicroseconds(ramc_FSKRTTYbaudDelay);
+    delayMicroseconds(local_FSKRTTYbaudDelay);
   }
   digitalWrite(LED1, HIGH);                    //start  mark condition
   FSK_RTTY_High();                             //send a 1 bit, 1342hz shift, high tone
-  delayMicroseconds(ramc_FSKRTTYbaudDelay);    //leave time for the stop bit
-  delayMicroseconds(ramc_FSKRTTYbaudDelay);    //and another stop bit
+  delayMicroseconds(local_FSKRTTYbaudDelay);   //leave time for the stop bit
+  delayMicroseconds(local_FSKRTTYbaudDelay);   //and another stop bit
 }
 
 
@@ -89,12 +90,10 @@ void FSK_RTTY_High()
 }
 
 
-void start_FSKRTTY(byte Regshift)
+void Start_FSKRTTY(byte local_Regshift, unsigned int local_FSKRTTYleadin, byte local_FSKRTTYpips)
 {
   byte i;
   int j;
-  lora_DirectSetup();                            //set for direct mode
-  lora_SetFreq(ramc_TrackerMode_Frequency, ramc_CalibrationOffset);
 
   NoShiftH = lora_Read(lora_RegFrMsb);
   NoShiftM = lora_Read(lora_RegFrMid);
@@ -113,7 +112,7 @@ void start_FSKRTTY(byte Regshift)
   Serial.println(NoShiftL, HEX);
 #endif
 
-  j = NoShiftL + Regshift;
+  j = NoShiftL + local_Regshift;
 
   if (j > 255)
   {
@@ -142,11 +141,11 @@ void start_FSKRTTY(byte Regshift)
   Serial.println(ShiftL, HEX);
 #endif
 
-  lora_Write(lora_RegFdevLsb, 0x00);           //set deviation to 0
+  lora_Write(lora_RegFdevLsb, 0x00);                //set deviation to 0
 
   FSK_RTTY_High();
 
-  for (i = 0; i <= FSKRTTYpips; i++)           //send FSK lead in pips
+  for (i = 1; i <= local_FSKRTTYpips; i++)           //send FSK lead in pips
   {
     digitalWrite(LED1, HIGH);
     lora_TXONDirect(10);
@@ -157,9 +156,9 @@ void start_FSKRTTY(byte Regshift)
     delay(950);
   }
   lora_TXONDirect(10);
-  delay(FSKRTTYleadin);
+  delay(local_FSKRTTYleadin);
   Serial.println();
-  lora_Write(lora_RegPllHop, 0xAD);            //set fast hop mode, needed for fast changes of frequency
+  lora_Write(lora_RegPllHop, 0xAD);                  //set fast hop mode, needed for fast changes of frequency
 }
 
 

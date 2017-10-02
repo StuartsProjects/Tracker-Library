@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -15,15 +15,15 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This program reads the GPS via serial, can be hardware of softserial.
+  This program reads the Standard GPS via serial, can be hardware of softserial.
+  Most of the routines are actually empty because there is no common controls for generic GPSs. 
 
   To Do:
 
 *******************************************************************************************************************************
 */
 
-
-void GPS_GetProcessChar();
+byte GPS_GetByte();
 void GPS_StartRead();
 void GPS_On();
 void GPS_Off();
@@ -39,28 +39,25 @@ void GPS_PollNavigation();
 boolean GPS_CheckNavigation();
 void GPS_SetCyclicMode();
 void GPS_SoftwareBackup();
+void GPS_PMREQBackup();
+void GPS_LowCurrent();
 
-unsigned long GPSonTime;
-unsigned long GPSoffTime;
-unsigned long GPSFixTime;
-
-byte config_attempts;
-
-boolean GPS_Config_Error;
 
 byte GPS_Reply[GPS_Reply_Size];             //Byte array for storing GPS reply to UBX commands
 
 
-#include <TinyGPS++.h>
-TinyGPSPlus gps;                            //Create the TinyGPS++ object
-
-
-
-void GPS_GetProcessChar()                   //get and process output from GPS
+byte GPS_GetByte()                          //get and process output from GPS
 {
-  while (GPSserial.available() > 0)
-    gps.encode(GPSserial.read());
+  if (GPSserial.available() ==  0)
+  {
+    return 0xFF;
+  }
+  else
+  {
+    return GPSserial.read();
+  }
 }
+
 
 
 void GPS_StartRead()
@@ -72,9 +69,7 @@ void GPS_StartRead()
 void GPS_On(boolean powercontrol)
 {
   //turns on the GPS
-  //has to deal with software power control (UBLOX) and hardware power control, for tracker boards with that option
   Serial.println(F("GPSOn"));
-  GPSonTime = millis();
   GPSserial.begin(GPSBaud);
 
   if (powercontrol)
@@ -89,22 +84,21 @@ void GPS_On(boolean powercontrol)
 void GPS_Off(boolean powercontrol)
 {
   //power down GPS, prepare to go to sleep
-  //has to deal with software power control (UBLOX) and hardware power control, for tracker boards with that option
-
+  
   if (powercontrol)
   {
+ 
+#ifdef Remove_GPS_Power
     digitalWrite(GPSPOWER, HIGH);          //force GPS power off
-
-#ifdef Use_GPS_SoftwareBackup
-    GPS_SoftwareBackup();
 #endif
 
-    GPSoffTime = millis();
-    Serial.print(F("GPSOff at "));
-    GPSFixTime = (GPSoffTime - GPSonTime);
-    Serial.print(GPSFixTime);
-    Serial.println(F("mS"));
+#ifdef Use_GPS_SoftwareBackup
+    GPS_SoftwareBackup();                  //there is no generic routine for this 
+    GPS_LowCurrent();
+#endif
+   
   }
+  
   GPSserial.end();
 }
 
@@ -120,7 +114,7 @@ void GPS_Send_Config(unsigned long Progmem_ptr, byte length, byte replylength, b
   byte byteread, i;
   unsigned long ptr;
 
-  config_attempts = attempts;
+  byte config_attempts = attempts;
 
   do
   {
@@ -215,6 +209,9 @@ void GPS_SoftwareBackup()
 }
 
 
-
+void GPS_LowCurrent()
+{
+  //null routine, in case a program uses the same routine for a UBLOX GPS
+}
 
 

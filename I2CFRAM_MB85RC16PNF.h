@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 2/10/17
 
   http://www.LoRaTracker.uk
 
@@ -25,7 +25,7 @@
 
 #include <Wire.h>
 
-const int Memory_I2C_Addr = 0x50;                     //base address of FRAM
+const int Memory_I2C_Addr = 0x50;                     //base I2C address of FRAM, this device it actually uses 8 addresses from base
 
 void Memory_Start()
 {
@@ -75,7 +75,7 @@ void Memory_WriteFloat(unsigned int addr, float x)
   for (index = 0; index < 4; index++)
   {
     val = data.b[index];
-    Wire.write(val);                                   //write the data
+    Wire.write(val);                                    //write the data
   }
 
   Wire.endTransmission();
@@ -287,6 +287,37 @@ unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
   return CRC;
 
 }
+
+
+void Print_Memory(uint16_t start_addr, uint16_t end_addr)
+{
+  //print the contents of Memory
+  byte data;
+  unsigned int i;
+   
+  uint8_t value;
+  for (uint16_t a = start_addr; a <= end_addr; a++) 
+  {
+    value = Memory_ReadByte(a);
+    if ((a % 16) == 0) 
+    {
+      Serial.print(F("\n 0x")); 
+      if (a < 0x10) 
+      {
+       Serial.print('0');
+      }
+      Serial.print(a, HEX); 
+      Serial.print(F(": "));
+    }
+    Serial.print(F("0x")); 
+    if (value < 0x10) 
+      Serial.print('0');
+    Serial.print(value, HEX); 
+    Serial.print(F(" "));
+  }
+  Serial.println();
+}
+
 
 
 void Memory_Set(unsigned int startaddr, unsigned int endaddr, byte lval)

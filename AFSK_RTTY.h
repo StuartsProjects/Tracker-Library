@@ -4,7 +4,7 @@
 
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 14/08/17
+  Copyright of the author Stuart Robinson - 02/10/17
 
   http://www.LoRaTracker.uk
 
@@ -17,7 +17,7 @@
   intended purpose and free from errors.
 
   This program sends data as audio tones (AFSK RTTY) at 300 baud, 7 bit, 1 start bit, 2 stop bits and no
-  parity. Tones are 634Hz for a 0 bit and 1000hz for 1 bit. Tones are on pin lora_TonePin.
+  parity. Tones are 634Hz for a 0 bit and 1000hz for 1 bit. Tones are on pin Audio_Out.
 
   Can be used for transmitting ASFK RTTY over the air or for a direct link to a PC sound card
 
@@ -33,7 +33,7 @@
 
 void start_AFSK_RTTY()
 {
-  tone(lora_TonePin, tonehighHz);             //lead in is high tone
+  tone(Audio_Out, tonehighHz);               //lead in is high tone
   delay(afskleadinmS);
 }
 
@@ -41,7 +41,7 @@ void start_AFSK_RTTY()
 void end_AFSK_RTTY()
 {
   delay(500);                                 //500mS seconds of high tone to finish
-  noTone(lora_TonePin);
+  noTone(Audio_Out);
   digitalWrite(LED1, LOW);
 }
 
@@ -55,7 +55,7 @@ void SendAFSKRTTY(byte chartosend)
   byte test;
   Serial.write(chartosend);                   //send character to serial terminal for display
   digitalWrite(LED1, LOW);
-  tone(lora_TonePin, tonelowHz);
+  tone(Audio_Out, tonelowHz);
   delayMicroseconds(AFSKrttybaud);            //delay for 1 bit at baud rate,start bit
   delayMicroseconds(AFSKrttybaud);
 
@@ -64,12 +64,12 @@ void SendAFSKRTTY(byte chartosend)
     if ((chartosend & 0x01) != 0)
     {
       digitalWrite(LED1, HIGH);
-      tone(lora_TonePin, tonehighHz);
+      tone(Audio_Out, tonehighHz);
     }
     else
     {
       digitalWrite(LED1, LOW);
-      tone(lora_TonePin, tonelowHz);           //send a 0 bit, 366hz shift, low
+      tone(Audio_Out, tonelowHz);              //send a 0 bit, 366hz shift, low
     }
 
     chartosend = (chartosend / 2);             //get the next bit
@@ -77,7 +77,7 @@ void SendAFSKRTTY(byte chartosend)
     delayMicroseconds(AFSKrttybaud);
   }
   digitalWrite(LED1, HIGH);                    //start  mark condition
-  tone(lora_TonePin, tonehighHz);              //send a 1 bit high tone
+  tone(Audio_Out, tonehighHz);                 //send a 1 bit high tone
   delayMicroseconds(AFSKrttybaud);             //leave time for the stop bit
   delayMicroseconds(AFSKrttybaud);             //and another stop bit
   delayMicroseconds(AFSKrttybaud);
