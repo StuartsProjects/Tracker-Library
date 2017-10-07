@@ -25,34 +25,30 @@
 
 
 #define MB1_RX 0
+#define Bluetooth_RX 0
 #define MB1_TX 1
+#define Bluetooth_TX 1
 #define MB1_INT1 2
 #define SWITCH1 3
 #define MB2_CS  4
 #define SD_CS 4
 #define MB1_INT2 5
 #define MB1_PWM  6
-#define Audio_Out 6            //pin number for Audio tone generation (AFSK)
+#define Audio_Out 6                  //pin number for Audio tone generation (AFSK)
 #define GPSPOWER 7
 #define LED1 8                       //pin number for LED
 #define WDI 8                        //pin for using a watchdog device
 #define MB1_RESET 9
 #define MB1_CS  10
-#define MOSI 11
-#define MISO 12
-#define SCK 13
 
 #define MB2_INT1 A0
 #define MB1_AN A1
 #define MB2_TX  A2
 #define MB2_RX  A3
-#define SDA A4
-#define SCL A5
 #define SupplyAD  A6                 //measure supply voltage here
 #define MB2_AN A7
 
 #define ADMultiplier 10              //multiplier for supply volts calculation
-#define Audio_Out MB1_PWM            //pin number for Audio tone generation (AFSK) may be same as LoRa tone pin
 
 #ifdef GPS_in_MB2
 #define GPSTX MB2_TX
@@ -67,7 +63,7 @@
 
 #ifdef LoRa_Device_in_MB1            //if the LoRa device is in MB1
 #define lora_TonePin MB1_PWM
-#define Audio_Out MB1_PWM            //pin number for Audio tone generation (AFSK) may be same as LoRa tone pin
+//#define Audio_Out MB1_PWM            //pin number for Audio tone generation (AFSK) may be same as LoRa tone pin
 #define lora_NReset MB1_RESET
 #define lora_NSS MB1_CS
 #define lora_DIO0 MB1_INT1

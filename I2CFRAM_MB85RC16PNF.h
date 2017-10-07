@@ -41,7 +41,8 @@ void Memory_End()
 
 /***************************************************************************
   Write Routines
-  /***************************************************************************/
+ ***************************************************************************
+ */
 
 void Memory_WriteByte(unsigned int addr, byte x)
 {
@@ -146,7 +147,8 @@ void Memory_WriteULong(unsigned int addr, unsigned long x)
 
 /***************************************************************************
   Read Routines
-  /***************************************************************************/
+ **************************************************************************
+ */
 
 byte Memory_ReadByte(unsigned int addr)
 {
@@ -154,7 +156,7 @@ byte Memory_ReadByte(unsigned int addr)
   byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
 
-  byte val;
+  //byte val;
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
   Wire.write(lsb_addr);
   Wire.endTransmission();
@@ -170,7 +172,7 @@ int Memory_ReadInt(unsigned int addr)
   byte lsb_data, msb_data;
 
   byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
-  byte lsb_addr = lowByte(addr);
+  //byte lsb_addr = lowByte(addr);
 
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
@@ -190,7 +192,7 @@ unsigned int Memory_ReadUInt(unsigned int addr)
   byte lsb_data, msb_data;
 
   byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
-  byte lsb_addr = lowByte(addr);
+  //byte lsb_addr = lowByte(addr);
 
 
   Wire.beginTransmission(Memory_I2C_Addr + msb_addr);
@@ -208,7 +210,7 @@ unsigned int Memory_ReadUInt(unsigned int addr)
 
 float Memory_ReadFloat(unsigned int addr)
 {
-  byte index, val;
+  byte val;
 
   byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
@@ -235,7 +237,7 @@ float Memory_ReadFloat(unsigned int addr)
 
 unsigned long Memory_ReadULong(unsigned int addr)
 {
-  byte index, val;
+  byte val;
   byte msb_addr = (highByte(addr) & 0x07);            //mask off bottom 3 bytes of address top 3 bits of addr only are used, 2K FRAM
   byte lsb_addr = lowByte(addr);
 
@@ -292,8 +294,8 @@ unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
 void Print_Memory(uint16_t start_addr, uint16_t end_addr)
 {
   //print the contents of Memory
-  byte data;
-  unsigned int i;
+  //byte data;
+  //unsigned int i;
    
   uint8_t value;
   for (uint16_t a = start_addr; a <= end_addr; a++) 

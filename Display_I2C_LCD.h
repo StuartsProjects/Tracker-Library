@@ -25,7 +25,7 @@
 #define Using_Display_I2C_LCD
 
 #include <Wire.h>  
-#include <LiquidCrystal_I2C.h>                                   //www.4tronix.co.uk/arduino/sketches/LiquidCrystal_V1.2.1.zip
+#include <LiquidCrystal_I2C.h>                                 //https://bitbucket.org/fmalpartida/new-liquidcrystal/downloads/ (version 1.3.4)
 
 LiquidCrystal_I2C disp(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  //Set the LCD I2C address and pins used
 

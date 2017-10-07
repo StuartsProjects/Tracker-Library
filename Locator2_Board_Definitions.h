@@ -37,6 +37,7 @@
 #define lora_NSS 10                   //pin number where the NSS line for the LoRa device is connected
 #define SupplyAD A0                   //pin for supply AD
 #define RCPulse A1                    //pin used to read RC pulse
+#define SWITCH1 A1                    //some programs use this pin for a switch 
 #define Audio_Out A1                  //pin number for external tone generation
 #define GPSTX A2                      //pin number for TX output - RX into GPS
 #define GPSRX A3                      //pin number for RX input - TX from GPS
@@ -50,6 +51,5 @@
 #define DISP_CS -1                    //pin not used 
 #define DISP_RESET -1                 //pin not used 
 #define DISP_DC -1                    //pin not used
-#define SWITCH1 -1                    //pin not used
 #define SD_CS -1                      //pin not used  
 

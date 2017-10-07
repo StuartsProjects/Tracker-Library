@@ -18,7 +18,8 @@
   This is program is the routines for using the LoRa device and is common for all the newer 'LoRaTracker' programs.
 
   To Do:
-
+  Add check for RX packet longer than buffer can cope with
+  
 
 *******************************************************************************************************************************
 */
@@ -180,6 +181,7 @@ unsigned long lora_returnbandwidth(byte BWregvalue)
     default:
       break;
   }
+  return 0;
 }
 
 
@@ -344,9 +346,9 @@ void lora_TXONDirect(byte TXPower)
 void lora_TXOFF()
 {
   //turns off transmitter
-  unsigned long temp;
-  lora_Write(lora_RegOpMode, 0x08);           //TX and RX to sleep, in direct mode
+ lora_Write(lora_RegOpMode, 0x08);           //TX and RX to sleep, in direct mode
 #ifdef LORADEBUG
+  unsigned long temp;
   temp = millis() - lora_StartTXTime;
   Serial.print(temp);
   Serial.println(F("mS"));
@@ -430,8 +432,8 @@ void lora_RXBuffPrint(byte PrintType)
   //PrintType = 0 = ASCII
   //PrintType = 1 = Decimal
   //PrintType = 2 = HEX
-
-  byte index, bufferData;
+  byte bufferData;
+  //byte index, bufferData;
   Serial.write(lora_RXPacketType);
   Serial.write(lora_RXDestination);
   Serial.write(lora_RXSource);
@@ -529,6 +531,7 @@ void lora_ReadPacket()
   byte index, RegData;
   lora_RXpacketCount++;
   lora_RXPacketL = lora_Read(lora_RegRxNbBytes);
+  
   lora_PacketRSSI = lora_returnRSSI(lora_Read(lora_RegPktRssiValue));
   lora_PacketSNR = lora_returnSNR(lora_Read(lora_RegPktSnrValue));
 
@@ -542,7 +545,7 @@ void lora_ReadPacket()
   lora_RXSource = SPI.transfer(0);
 
   lora_RXStart = 0;
-  lora_RXEnd = lora_RXPacketL - 4;
+  lora_RXEnd = lora_RXPacketL - 4;           //calculate the end of the packet in the buffer
 
   for (index = lora_RXStart; index <= lora_RXEnd; index++)
   {
@@ -764,7 +767,7 @@ byte lora_QueuedSend(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char T
   //wait time specified for a incoming packet, 0 = no timeout
   //returns a value of 0 for timeout, 1 for packet sent and acknowledged
 
-  byte RegData;
+  //byte RegData;
   unsigned int tempAttempts = Attempts;             //to store value of lora_Attempts
 
 #ifdef LORADEBUG
@@ -794,6 +797,7 @@ byte lora_QueuedSend(byte TXBuffStart, byte TXBuffEnd, char TXPacketType, char T
     Serial.write(TXPacketType);
     Serial.write(TXDestination);
     Serial.write(TXSource);
+    Serial.print(F(" "));
 #endif
 
     lora_Send(TXBuffStart, TXBuffEnd, TXPacketType, TXDestination, TXSource, TXTimeout, TXPower, StripAddress);

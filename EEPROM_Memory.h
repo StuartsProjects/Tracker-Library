@@ -132,6 +132,39 @@ unsigned int Memory_CRC(unsigned int startaddr, unsigned int endaddr)
 }
 
 
+
+void Print_Memory(uint16_t start_addr, uint16_t end_addr)
+{
+  //print the contents of Memory
+  //byte data;
+ // unsigned int i;
+   
+  uint8_t value;
+  for (uint16_t a = start_addr; a <= end_addr; a++) 
+  {
+    value = Memory_ReadByte(a);
+    if ((a % 16) == 0) 
+    {
+      Serial.print(F("\n 0x")); 
+      if (a < 0x10) 
+      {
+       Serial.print('0');
+      }
+      Serial.print(a, HEX); 
+      Serial.print(F(": "));
+    }
+    Serial.print(F("0x")); 
+    if (value < 0x10) 
+      Serial.print('0');
+    Serial.print(value, HEX); 
+    Serial.print(F(" "));
+  }
+  Serial.println();
+}
+
+
+
+
 void Memory_Set(unsigned int startaddr, unsigned int endaddr, byte lval)
 {
   unsigned int i;

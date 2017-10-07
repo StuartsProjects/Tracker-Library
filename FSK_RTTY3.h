@@ -47,7 +47,7 @@ void Send_FSKRTTY(byte chartosend, unsigned int local_FSKRTTYbaudDelay)
 //format is 7 bits, no parity and 2 stop bits
 {
   byte numbits;
-  byte test;
+  //byte test;
   
   Serial.write(chartosend);                   //send character to serial terminal for display
   digitalWrite(LED1, LOW);

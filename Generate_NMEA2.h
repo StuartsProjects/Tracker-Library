@@ -88,7 +88,7 @@ float convert_degrees(float decimaldegrees)
 }
 
 
-char Hex2(char lchar)
+char Hex2(byte lchar)
 {
   //used in CRC calculation
   char Table[] = "0123456789ABCDEF";
@@ -131,7 +131,7 @@ byte addChecksum(byte lcount)
 void send_NMEA(float latfloat, float lonfloat, float alt)
 {
   //this is the routine called from the main program
-  byte checksum, count, i;
+  byte count, i, len;
   int intalt;
   float latitude, longitude;
 
@@ -158,11 +158,12 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
   dtostrf(longitude, 10, 4, LonArray);
   dtostrf(intalt, 1, 0, AltArray);
 
-  memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));        //clear array
-
+  len = sizeof(Bluetooth_buff);
+  memset(Bluetooth_buff, 0, len);                           //clear array to 0s
+  
   Serial.println(F("Send NMEA"));
 
-  snprintf(Bluetooth_buff,
+  count = snprintf((char*) Bluetooth_buff,
            Bluetooth_Buff_Size,
            "$GPGGA,000000.000,%s,%c,%s,%c,1,4,3.16,%s.0,M,53.3,M,,",
            LatArray,
@@ -172,7 +173,6 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
            AltArray
           );
 
-  count = strlen(Bluetooth_buff);                            //how long is the array ?
   replaceSpaces(count);                                      //replace spaces with 0s
   count = addChecksum(count);                                //checksum adds characters to array, need to pick up new end value
 
@@ -184,21 +184,20 @@ void send_NMEA(float latfloat, float lonfloat, float alt)
   print_NMEA_Bluetooth(count);                               //print the GPGGA
   //print_NMEA_Terminal(count);
 
-  memset(Bluetooth_buff, 0, sizeof(Bluetooth_buff));         //clear array
+  len = sizeof(Bluetooth_buff);
+  memset(Bluetooth_buff, 0, len);                           //clear array to 0s
 
   //Serial.print(F("Send NMEA > "));
 
-  snprintf(Bluetooth_buff,
+  count = snprintf((char*) Bluetooth_buff,
            Bluetooth_Buff_Size,
            "$GPRMC,000000.000,A,%s,%c,%s,%c,0.00,0.00,010101,,,A",
            LatArray,
            Latquad,
            LonArray,
-           Lonquad,
-           AltArray
+           Lonquad
           );
 
-  count = strlen(Bluetooth_buff);                             //how long is the array ?
   replaceSpaces(count);                                       //replacespaces with 0s
   count = addChecksum(count);                                 //checksum adds characters to array, need to pick up new end value
   print_NMEA_Bluetooth(count);                                //print the GPRMC

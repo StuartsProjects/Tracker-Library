@@ -81,7 +81,7 @@ void GPS_On(boolean powercontrol)
   if (powercontrol)
   {
     digitalWrite(GPSPOWER, LOW);          //force GPS power on, if its not in use has no effect
-    GPSserial.write(0);                   //wakeup gps, in case software power down is in use
+    GPSserial.write('0');                   //wakeup gps, in case software power down is in use
   }
 }
 

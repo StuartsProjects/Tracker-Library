@@ -86,7 +86,7 @@ float convert_degrees(float decimaldegrees)
 }
 
 
-char Hex2(char lchar)
+char Hex2(byte lchar)
 {
   //used in CRC calculation
   char Table[] = "0123456789ABCDEF";
@@ -129,7 +129,7 @@ byte addChecksum(byte lcount)
 void send_NMEA(float latfloat, float lonfloat, float alt)
 {
   //this is the routine called from the main program
-  byte checksum, count, i;
+  byte count, i;
   int intalt;
   float latitude, longitude;
 
