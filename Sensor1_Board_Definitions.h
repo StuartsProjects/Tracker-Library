@@ -46,6 +46,7 @@
 #define DISPLAYTX A1                 //for driving serial displays
 #define MB2_TX  A2
 #define MB2_RX  A3
+#define BUZZ A2                      //some test programs use this pin for a buzzer
 #define SDA A4
 #define SCL A5
 

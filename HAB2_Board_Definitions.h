@@ -45,6 +45,7 @@
 #define TimePulse A1                  //For reading the GPS timepulse signal
 #define GPSTX A2                      //pin number for TX output - RX into GPS
 #define GPSRX A3                      //pin number for RX input - TX from GPS
+#define BUZZ A2                       //some test programs use this pin for a buzzer
 #define RCPulse -1                    //unused pin
 #define DisplayTX -1                  //unused pin
 #define MEMORY_CS -1                  //unused pin          

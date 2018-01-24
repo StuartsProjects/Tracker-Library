@@ -45,6 +45,7 @@
 #define MB1_AN A1
 #define MB2_TX  A2
 #define MB2_RX  A3
+#define BUZZ A2                      //some test programs use this pin for a buzzer
 #define SupplyAD  A6                 //measure supply voltage here
 #define MB2_AN A7
 

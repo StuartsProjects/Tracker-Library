@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 2/10/17
+  Copyright of the author Stuart Robinson - 13/10/17
 
   http://www.LoRaTracker.uk
 
@@ -15,11 +15,20 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This is program is the routines for using the LoRa device and is common for all the newer 'LoRaTracker' programs.
+  This is set of LoRa routines was introduced to make it easier to transition to environments that dont have the full set of ATMEGA 
+  style libraries. Tone for instance is missing from DUE and Microbit and some environments default to 32 bit integers which 
+  can cause issues for the normal 'int' declarations. 
 
-  To Do:
-  Add check for RX packet longer than buffer can cope with
+  Note: This library must be considered as a work in progress, no guarantees. 
   
+  To Do:
+  Add check for RX packet longer than buffer can cope with.
+   
+  Change assignments to be unequivocal, so that varible length is defined, not assumed;
+  Signed variabled to be changed to - int8_t, int16_t, int32_t, int64_t
+  UnSigned variabled to be changed to - uint8_t, uint16_t, uint32_t, uint64_t
+ 
+
 
 *******************************************************************************************************************************
 */
@@ -101,6 +110,9 @@ const byte lora_RegPreambleLsb = 0x21;
 const byte lora_RegPayloadLength = 0x22;
 const byte lora_RegFifoRxByteAddr = 0x25;
 const byte lora_RegModemConfig3 = 0x26;
+const byte lora_RegFeiMsb = 0x28;
+const byte lora_RegFeiMid = 0x29;
+const byte lora_RegFeiLsb = 0x2A;
 const byte lora_RegPacketConfig2 = 0x31;
 const byte lora_RegDioMapping = 0x40;
 const byte lora_RegPllHop = 0x44;
@@ -134,8 +146,10 @@ unsigned long lora_TXTime;        //used to record TX On time
 unsigned long lora_StartTXTime;   //used to record when TX starts
 unsigned long lora_RXTime;        //used to record RX On time
 unsigned long lora_StartRXTime;   //used to record when RX starts
-
-
+unsigned long lora_CurrentFreq;   //used to store current frequncy, needed for afc function
+   
+//precalculated values for frequency error calculation
+const PROGMEM  float bandwidth[] = {0.1309, 0.1745, 0.2617, 0.3490, 0.5234, 0.6996, 1.049, 2.097, 4.194, 8.389};
 
 /*
 **************************************************************************************************
@@ -259,8 +273,36 @@ byte lora_Read(byte Reg)
   return RegData;
 }
 
+signed int lora_GetFrequencyError()
+{
+  unsigned int msb, mid, lsb;
+  int freqerr;
+  byte bw;
+  float bwconst;
+  
+  msb = lora_Read(lora_RegFeiMsb);
+  mid = lora_Read(lora_RegFeiMid);
+  lsb = lora_Read(lora_RegFeiLsb);
+  bw = lora_Read(lora_RegModemConfig1) & (0xF0);
+  bw = bw >> 4;
+  bwconst = pgm_read_float_near(bandwidth + bw);
+  
+  freqerr = msb << 12;                     //shift lower 4 bits of msb into high 4 bits of freqerr
+  mid = (mid << 8) + lsb;
+  mid = (mid >> 4);
+  freqerr = freqerr + mid;
+
+  freqerr = (int) (freqerr * bwconst);
+
+  return freqerr;
+}
+
+
+
+
 void lora_SetFreq(uint64_t freq64, int loffset)
 {
+  lora_CurrentFreq = freq64;
   freq64 = freq64 + loffset;
   freq64 = ((uint64_t)freq64 << 19) / 32000000;
   lora_Write(lora_RegFrMsb, (byte)(freq64 >> 16));
@@ -327,6 +369,7 @@ void lora_Setup()
   lora_Write(lora_RegSymbTimeoutLsb, 0xFF);   //RegSymbTimeoutLsb
   lora_Write(lora_RegPreambleLsb, 0x0C);      //RegPreambleLsb, default
   lora_Write(lora_RegFdevLsb, Deviation);     //LSB of deviation, 5kHz
+  lora_Write(lora_RegPllHop, 0x2D);           //make sure fast hop mode not set
 }
 
 
@@ -365,15 +408,36 @@ void lora_DirectSetup()
 }
 
 
-void lora_Tone(int ToneFrequency, int ToneLength, int TXPower)
+
+void lora_Tone(int ToneFrequency, unsigned long ToneLength, int TXPower)
 {
-  //Transmit an FM tone
+  //Transmit an FM audio tone without using tone library. Uses simple delayMicroseconds values that are assumed to be no more than
+  //16383us or about 60Hz, lengths for low frequency tones will not be accurate. 
+  
+  uint32_t ToneDelayus, Tone_end_mS;
+  ToneDelayus = ToneFrequency / 2;
+  
+  #ifdef LORADEBUG  
+  Serial.print(F("lora_Tone()  "));
+  Serial.print(F("Delay "));
+  Serial.print(ToneDelayus);
+  Serial.print(F("uS  "));
+  #endif
+  
   lora_DirectSetup();
   lora_Write(lora_RegFdevLsb, Deviation);     //We are generating a tone so set the deviation, 5kHz
+  Tone_end_mS = millis() + ToneLength;
   lora_TXONDirect(TXPower);
-  tone(lora_TonePin, ToneFrequency);
-  delay(ToneLength);
-  noTone(lora_TonePin);
+  pinMode(lora_TonePin, OUTPUT);
+  
+  while (millis() < Tone_end_mS)
+  {
+  digitalWrite(lora_TonePin, HIGH);
+  delayMicroseconds(ToneDelayus);
+  digitalWrite(lora_TonePin, LOW);
+  delayMicroseconds(ToneDelayus);   
+  }
+  
   pinMode(lora_TonePin, INPUT);
   lora_TXOFF();
 }
@@ -506,7 +570,7 @@ void lora_ReceptionInfo()
 
 int8_t lora_returnRSSI(byte RegData)
 {
-  RegData = (157 - RegData) * (-1);
+  RegData = (137 - RegData) * (-1);
   return RegData;
 }
 
@@ -602,7 +666,9 @@ byte lora_waitPacket(char waitPacket, unsigned long waitSeconds)
   //wait time specified for a incoming packet, 0 = no timeout
   //returns a value of 0 for timeout, 1 for packet received
 
-  char PacketType;
+  //char PacketType;
+  int8_t PacketType = 0;                            //function can exit before PacketType is assigned but not not used, this creates a compiler warning 
+  
   byte RegData;
   unsigned long endtime;
   endtime = (millis() + (waitSeconds * 1000));

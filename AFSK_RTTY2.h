@@ -57,7 +57,7 @@ void SendAFSKRTTY(byte chartosend)
   digitalWrite(LED1, LOW);
   tone(Audio_Out, tonelowHz);
   delayMicroseconds(AFSKrttybaud);            //delay for 1 bit at baud rate,start bit
-  delayMicroseconds(AFSKrttybaud);
+  //delayMicroseconds(AFSKrttybaud);
 
   for (numbits = 1;  numbits <= 7; numbits++) //send 7 bits, LSB first
   {
@@ -74,14 +74,14 @@ void SendAFSKRTTY(byte chartosend)
 
     chartosend = (chartosend / 2);             //get the next bit
     delayMicroseconds(AFSKrttybaud);
-    delayMicroseconds(AFSKrttybaud);
+    //delayMicroseconds(AFSKrttybaud);
   }
   digitalWrite(LED1, HIGH);                    //start  mark condition
   tone(Audio_Out, tonehighHz);                 //send a 1 bit high tone
   delayMicroseconds(AFSKrttybaud);             //leave time for the stop bit
   delayMicroseconds(AFSKrttybaud);             //and another stop bit
-  delayMicroseconds(AFSKrttybaud);
-  delayMicroseconds(AFSKrttybaud);
+  //delayMicroseconds(AFSKrttybaud);
+  //delayMicroseconds(AFSKrttybaud);
 }
 
 

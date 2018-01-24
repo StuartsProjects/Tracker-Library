@@ -30,4 +30,9 @@
 #define lora_NReset 9                //pin where LoRa device reset line is connected
 #define lora_NSS 10                  //pin number where the NSS line for the LoRa device is connected
 #define lora_DIO0 -1                 //not used pin
-
+#define SupplyAD  -1                 //measure supply voltage here
+#define ADMultiplier 10              //multiplier for supply volts calculation
+#define GPSPOWER -1                  //not used pin 
+#define WDI -1                       //not used pin
+#define GPSRX -1                     //not used pin
+#define GPSTX -1                     //not used pin

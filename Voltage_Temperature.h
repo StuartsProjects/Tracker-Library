@@ -19,6 +19,7 @@
   CPU supply voltage and temperature, each particular CPU needs calibrating.
 
   To Do:
+  Check that works exteranal temperature readings on HAB 
 
 *******************************************************************************************************************************
 */
@@ -28,6 +29,13 @@ unsigned int read_SupplyVoltage();
 void print_SupplyVoltage();
 float read_Temperature();
 void print_Temperature();
+
+#define TC74_Address 0x4c
+
+#ifdef External_TemperatureRead
+#include <TC74_I2C.h>                          //https://github.com/Mario-H/TC74_I2C/blob/master/LICENSE.md
+TC74_I2C TC74(TC74_Address);                   //init with TC74 address from settings file
+#endif
 
 
 #ifdef CPU_VoltageRead
@@ -117,14 +125,26 @@ void print_SupplyVoltage()
 #endif
 
 
+
 #ifdef External_TemperatureRead
+
 float read_Temperature()
 {
-  //nothing to do
+  float temperature;
+  TC74.Init();
+  TC74.NoPowersave();                        //turn off powesave mode
+  temperature = (float) TC74.ReadTemp();
+  TC74.Powersave();                           //put TC74 in low current mode, approx 5uA
+  return temperature;
 }
+
+
 void print_Temperature()
 {
-  //nothing to do
+  float temp = read_Temperature() + Temperature_Adjust;
+  Serial.print(F("Temperature "));
+  Serial.print(temp,0);
+  Serial.print(F("C"));
 }
 #endif
 

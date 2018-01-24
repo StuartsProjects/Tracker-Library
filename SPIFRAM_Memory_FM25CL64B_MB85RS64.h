@@ -54,7 +54,7 @@ void Memory_End()
 void Memory_EnableWrite()
 {
   //Set Write Enable
-  digitalWrite(MEMORY_CS, LOW);           //set NSS low
+  digitalWrite(MEMORY_CS, LOW);           //set CS low
   SPI.transfer(Memory_WREN);              //set write enable
   digitalWrite(MEMORY_CS, HIGH);          //set CS high
 }
@@ -209,12 +209,12 @@ byte Memory_ReadByte(unsigned int addr)
   lsb = lowByte(addr);
   Memory_EnableWrite();
 
-  digitalWrite(MEMORY_CS, LOW);        //set NSS low
+  digitalWrite(MEMORY_CS, LOW);        //set CS low
   SPI.transfer(Memory_READ);           //OP code for write data byte
   SPI.transfer(msb);                   //write the MSB Address
   SPI.transfer(lsb);                   //write the LSB Address
   j = SPI.transfer(0);                 //read the byte
-  digitalWrite(MEMORY_CS, HIGH);       //set NSS high
+  digitalWrite(MEMORY_CS, HIGH);       //set CS high
   return j;
 }
 
@@ -228,7 +228,7 @@ float Memory_ReadFloat(unsigned int addr)
   lsb = lowByte(addr);
   Memory_EnableWrite();
 
-  digitalWrite(MEMORY_CS, LOW);        //set NSS low
+  digitalWrite(MEMORY_CS, LOW);        //set CS low
   SPI.transfer(Memory_READ);           //OP code for write data byte
   SPI.transfer(msb);                   //write the MSB Address
   SPI.transfer(lsb);                   //write the LSB Address
@@ -244,7 +244,7 @@ float Memory_ReadFloat(unsigned int addr)
     j = SPI.transfer(0);               //read the byte
     readdata.b[i] = j;
   }
-  digitalWrite(MEMORY_CS, HIGH);       //set NSS high
+  digitalWrite(MEMORY_CS, HIGH);       //set CS high
   return readdata.f;
 }
 
@@ -257,7 +257,7 @@ unsigned long Memory_ReadULong(unsigned int addr)
   lsb = lowByte(addr);
   Memory_EnableWrite();
 
-  digitalWrite(MEMORY_CS, LOW);        //set NSS low
+  digitalWrite(MEMORY_CS, LOW);        //set CS low
   SPI.transfer(Memory_READ);           //OP code for write data byte
   SPI.transfer(msb);                   //write the MSB Address
   SPI.transfer(lsb);                   //write the LSB Address
@@ -273,7 +273,7 @@ unsigned long Memory_ReadULong(unsigned int addr)
     j = SPI.transfer(0);               //read the byte
     readdata.b[i] = j;
   }
-  digitalWrite(MEMORY_CS, HIGH);       //set NSS high
+  digitalWrite(MEMORY_CS, HIGH);       //set CS high
   return readdata.f;
 }
 
@@ -286,13 +286,13 @@ unsigned int Memory_ReadUInt(unsigned int addr)
   msb = highByte(addr);
   lsb = lowByte(addr);
 
-  digitalWrite(MEMORY_CS, LOW);        //set NSS low
+  digitalWrite(MEMORY_CS, LOW);        //set CS low
   SPI.transfer(Memory_READ);           //OP code for write data byte
   SPI.transfer(msb);                   //write the MSB Address
   SPI.transfer(lsb);                   //write the LSB Address
   lsb = SPI.transfer(0);               //read the byte
   msb = SPI.transfer(0);               //read the byte
-  digitalWrite(MEMORY_CS, HIGH);       //set NSS high
+  digitalWrite(MEMORY_CS, HIGH);       //set CS high
   return (lsb + (msb * 256));
 }
 
@@ -305,13 +305,13 @@ int Memory_ReadInt(unsigned int addr)
   msb = highByte(addr);
   lsb = lowByte(addr);
 
-  digitalWrite(MEMORY_CS, LOW);        //set NSS low
+  digitalWrite(MEMORY_CS, LOW);        //set CS low
   SPI.transfer(Memory_READ);           //OP code for write data byte
   SPI.transfer(msb);                   //write the MSB Address
   SPI.transfer(lsb);                   //write the LSB Address
   lsb = SPI.transfer(0);               //read the byte
   msb = SPI.transfer(0);               //read the byte
-  digitalWrite(MEMORY_CS, HIGH);       //set NSS high
+  digitalWrite(MEMORY_CS, HIGH);       //set CS high
   return (lsb + (msb * 256));
 }
 

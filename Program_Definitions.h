@@ -90,12 +90,12 @@ const byte GPSHotFix = 7;            //bit when set enables GPS Hot Fix mode.
 
 
 //Status byte settings
-const byte GPSFix = 0;               //flag bit number to indicate GPS fix
+const byte GPSFix = 0;               //flag bit number to indicate GPS has current fix
 const byte UBLOXDynamicModel6Set = 1;//flag bit set when UBLOX dynamic mode 6 has been set (and Checked)
 const byte GLONASSisoutput = 2;      //flag bit number to indicate GLONASS found
 const byte GPSError = 3;             //flag bit to indicate GPS error or some sort.
-const byte Previous_Fix = 4;         //flag bit indication last known fix, not current
-const byte NoGPSTestMode = 7;        //flag bit number to indicate tracker in no GPS test mode
+const byte TrackerLost = 6;          //flag bit indication that tracker in lost mode
+const byte NoGPSTestMode = 7;        //flag bit number to indicate tracker in in GPS test mode
 
 
 #define SwitchOn 1                   //for tracker GPS control
@@ -204,6 +204,7 @@ const unsigned int addr_StartProgramData = 0x100;             //the start of pro
 const unsigned int addr_ResetCount = 0x100;                   //unsigned long int 4 bytes
 const unsigned int addr_SequenceNum = 0x104;                  //unsigned long int 4 bytes
 const unsigned int addr_mASecs = 0x108;                       //unsigned long int 4 bytes
+const unsigned int addr_TRStatus = 0x10C;                     //byte, used to store status
 const unsigned int addr_TestLocation_page1 = 0x1FF;           //used as a location for read\write tests
 const unsigned int addr_EndProgramData = 0x100;               //the end of program data in memory
 /*********************************************************************
@@ -216,9 +217,11 @@ const unsigned int addr_EndProgramData = 0x100;               //the end of progr
 const unsigned int addr_StartHABPayloadData = 0x200;          //for storing last received HAB tracker packet
 const unsigned int addr_TestLocation_page2 = 0x2FF;           //used as a location for read\write tests
 const unsigned int addr_EndHABPayloadData = 0x2FF;            //store up to 256 bytes of HAB Packet
-/*********************************************************************
+/*
+********************************************************************
   END HAB Payload data
-**********************************************************************/
+*********************************************************************
+*/
 
 /*********************************************************************
   START GPS CoordinateData
@@ -271,4 +274,39 @@ const unsigned int addr_EndMemory = 0x3FF;
 
 
 
+/*
+******************************************************************************************************
+Display Functions – for serial based text displays
+******************************************************************************************************
+*/
 
+/*
+#define StartText          0x23     //‘#’
+#define EndText            0x00 
+#define ClearDisplay       0x30     //‘0’ 
+#define InitialiseDisplay  0x31     //‘1’
+#define CursorPosition     0x32     //‘2’ 
+#define FontSize           0x33     //‘3’
+#define FontStyle          0x34     //‘4’ 
+#define UpdateDisplay      0x35     //‘5’
+#define ClearRow           0x36     //‘6’
+#define DisplayRotation    0x37     //‘7’
+#define TextColourBasic         0x41  //‘A’    
+#define BackgroundColourBasic   0x43  //‘C’ 
+#define Contrast                0x44  //‘D’
+*/
+
+
+/*
+******************************************************************************************************
+AFSK RTTY Baud delays
+delay in uS x 2 for 1 bit. 4700 = 100baud, 2295 = 200baud, 1470 = 300baud, 680 = 600baud, 275 = 1200baud.
+******************************************************************************************************
+*/
+
+const unsigned int AFSKrttybaud100 = 4700; 
+const unsigned int AFSKrttybaud200 = 2295; 
+const unsigned int AFSKrttybaud300 = 1470; 
+const unsigned int AFSKrttybaud600 = 680; 
+const unsigned int AFSKrttybaud1200 = 275;
+ 

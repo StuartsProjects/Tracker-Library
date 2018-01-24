@@ -42,13 +42,12 @@
 #define LED1 A3                       //pin number for LED on Tracker
 #define GPSTX A4                      //pin number for TX output - RX into GPS
 #define GPSRX A5                      //pin number for RX input - TX from GPS
+#define BUZZ A4                       //some test programs use this pin for a buzzer
 #define Bluetooth_TX  A4              //shared with GPS 
 #define Bluetooth_RX  A5              //shared with GPS 
 #define DisplayTX A5                  //soft serial TX pin for Digole Serial LCD
-#define Audio_Out -1                  //Unused pin
 #define GPSPOWER -1                   //Unused pin
 #define GPSBaud 9600                  //GPS baud rate
-#define SupplyAD -1                   //unused pin
 #define TimePulse -1                  //unused pin
 
 #define ADMultiplier 10               //multiplier for supply volts calculation

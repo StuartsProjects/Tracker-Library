@@ -41,6 +41,7 @@
 #define Audio_Out A1                  //pin number for external tone generation
 #define GPSTX A2                      //pin number for TX output - RX into GPS
 #define GPSRX A3                      //pin number for RX input - TX from GPS
+#define BUZZ A2                       //some test programs use this pin for a buzzer
 #define DisplayTX A5                  //soft serial TX pin for Digole Serial LCD
 
 #define ADMultiplier 10               //multiplier for supply volts calculation

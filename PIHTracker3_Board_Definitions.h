@@ -39,6 +39,7 @@
 #define CON2_1 A1                    //connected to CON2 pin 1 on external header
 #define GPSTX A2                     //pin number for TX output - RX into GPS
 #define GPSRX A3                     //pin number for RX input - TX from GPS
+#define BUZZ A2                      //some test programs use this pin for a buzzer
 #define RCPulse A4                   //pin used to read RC pulse
 #define DisplayTX A5                 //soft serial TX pin for Digole Serial LCD
 #define SupplyAD A0                  //pin for supply AD
@@ -51,5 +52,3 @@
 #define DISP_DC -1                   //pin not used 
 #define Bluetooth_TX -1              //pin not used 
 
-#define Bluetooth_RX  A3
-#define Bluetooth_TX  A2
