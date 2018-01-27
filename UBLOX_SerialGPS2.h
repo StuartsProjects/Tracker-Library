@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 2/10/17
+  Copyright of the author Stuart Robinson - 26/1/18
 
   http://www.LoRaTracker.uk
 
@@ -21,7 +21,7 @@
 
   Changes: 
   141017 Revised the method of saving arrays to configure GPS in memory avoiding the need for the FLASH-5 Library
-
+  260118 Changes to ensure repeat send of config messages are correct
 *******************************************************************************************************************************
 */
 
@@ -194,6 +194,8 @@ void GPS_Send_Config(const uint8_t *Progmem_ptr, byte arraysize, byte replylengt
       Serial.print(" ");
     }
 
+    Progmem_ptr = Progmem_ptr - arraysize;     //put Progmem_ptr back to start value in case we need to re-send the config
+ 
     Serial.println();
     
     if (replylength == 0)

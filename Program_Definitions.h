@@ -31,7 +31,8 @@
 */
 
 
-const char ACK = 'A';                   //Acknowledge 
+const char ACK = 'A';                   //Acknowledge
+const char AFC = 'a';                   //AFC packet 
 const char LinkReport = 'B';            //HAB Style in CSV ASCII format
 const char bLinkReport = 'b';           //binary style link report
 const char ClearToSend = 'C';           

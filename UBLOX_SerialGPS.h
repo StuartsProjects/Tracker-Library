@@ -3,7 +3,7 @@
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 2/10/17
+  Copyright of the author Stuart Robinson - 26/1/18
 
   http://www.LoRaTracker.uk
 
@@ -18,7 +18,10 @@
   This program reads a UBLOX GPS via serial. Uses Flash arrays stored in program memory.
 
 
-  To Do:   
+  To Do:  
+
+  Changes:
+  2601178 - Make send of config messages visable on serial monitor
 
 *******************************************************************************************************************************
 */
@@ -185,10 +188,12 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
     for (i = 1; i <= length; i++)
     {
       byteread = pgm_read_byte(ptr++);
-
       GPSserial.write(byteread);
-
+      Serial.print(byteread, HEX);
+      Serial.print(" ");
     }
+
+    Serial.println();
 
     if (replylength == 0)
     {

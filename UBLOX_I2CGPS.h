@@ -21,6 +21,7 @@
   To Do:
 
   Check GPS_Send_Config((unsigned int)
+  Check if issue with multiple Wire.begin()
 
 *******************************************************************************************************************************
 */
@@ -179,7 +180,7 @@ boolean GPS_WaitAck(unsigned long waitms, byte length)
 
 void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, byte attempts)
 {
-  byte byteread1, byteread2, i;
+  byte byteread1, byteread2, temp_length, i;
   unsigned int ptr;
 
   byte config_attempts = attempts;
@@ -195,9 +196,9 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
     }
 
     ptr = Progmem_ptr;
-    length = length / 2;                     //we are sending messages 2 bytes at a time
+    temp_length = length / 2;                     //we are sending messages 2 bytes at a time
 
-    for (i = 1; i <= length; i++)
+    for (i = 1; i <= temp_length; i++)
     {
 
       byteread1 = pgm_read_byte(ptr++);      //we will read and write 2 bytes at a time 
@@ -206,7 +207,13 @@ void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength, by
       Wire.write(byteread1);
       Wire.write(byteread2);
       Wire.endTransmission();
+      Serial.print(byteread1, HEX);
+      Serial.print(" ");
+      Serial.print(byteread2, HEX);
+      Serial.print(" ");
     }
+
+    Serial.println();
 
     if (replylength == 0)
     {

@@ -19,7 +19,7 @@
   CPU supply voltage and temperature, each particular CPU needs calibrating.
 
   To Do:
-  Check that works exteranal temperature readings on HAB 
+  Check that external temperature reading works on HAB2 Software 
 
 *******************************************************************************************************************************
 */
@@ -30,7 +30,7 @@ void print_SupplyVoltage();
 float read_Temperature();
 void print_Temperature();
 
-#define TC74_Address 0x4c
+//#define TC74_Address 0x4c                      //init with TC74 address, can be 0x48 to 0x4F depending on specific type
 
 #ifdef External_TemperatureRead
 #include <TC74_I2C.h>                          //https://github.com/Mario-H/TC74_I2C/blob/master/LICENSE.md
