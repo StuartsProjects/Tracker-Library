@@ -122,9 +122,8 @@ void Start_FSKRTTY(byte local_Regshift, unsigned int local_FSKRTTYleadin, byte l
     j = j - 256;
     ShiftL = j;
     ShiftM++;
-    if (ShiftM == 256)
+    if (ShiftM == 0)
     {
-      ShiftM = 0;
       ShiftH++;
     }
   }

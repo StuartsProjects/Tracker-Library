@@ -570,7 +570,7 @@ void lora_ReceptionInfo()
 
 int8_t lora_returnRSSI(byte RegData)
 {
-  RegData = (137 - RegData) * (-1);
+  RegData = (157 - RegData) * (-1);
   return RegData;
 }
 
