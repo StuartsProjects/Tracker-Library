@@ -46,7 +46,7 @@ unsigned long GPSFixTime;
 
 byte config_attempts;
 
-boolean GPS_Config_Error;
+//boolean GPS_Config_Error;
 
 byte GPS_Reply[GPS_Reply_Size];               //Byte array for storing GPS reply to UBX commands
 
