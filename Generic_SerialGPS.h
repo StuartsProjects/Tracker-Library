@@ -1,4 +1,4 @@
-//No_GPS.h
+//Generic_SerialGPS.h
 /*
 *******************************************************************************************************************************
   Easy Build LoRaTracker Programs for Arduino
@@ -14,8 +14,6 @@
 
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
-
-  This program is for uses when the is a requirement to operate a program without a GPS.
 
   To Do:
 
@@ -45,8 +43,6 @@ unsigned long GPSoffTime;
 unsigned long GPSFixTime;
 
 byte config_attempts;
-
-//boolean GPS_Config_Error;
 
 byte GPS_Reply[GPS_Reply_Size];               //Byte array for storing GPS reply to UBX commands
 
