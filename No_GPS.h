@@ -40,13 +40,7 @@ boolean GPS_CheckNavigation();
 void GPS_SetCyclicMode();
 void GPS_SoftwareBackup();
 
-unsigned long GPSonTime;
-unsigned long GPSoffTime;
-unsigned long GPSFixTime;
-
 byte config_attempts;
-
-boolean GPS_Config_Error;
 
 byte GPS_Reply[GPS_Reply_Size];               //Byte array for storing GPS reply to UBX commands
 
