@@ -43,9 +43,16 @@ byte config_attempts;
 byte GPS_Reply[GPS_Reply_Size];               //Byte array for storing GPS reply to UBX commands
 
 
-byte GPS_GetByte()                            //get and process output from GPS
+byte GPS_GetByte()                          //get and process output from GPS
 {
-  return 0xFF;
+  if (GPSserial.available() ==  0)
+  {
+    return 0xFF;
+  }
+  else
+  {
+    return GPSserial.read();
+  }
 }
 
 
