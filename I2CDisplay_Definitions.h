@@ -15,7 +15,7 @@ const byte TextColour = 0x31;           //'1'
 const byte BackgroundColour = 0x32;     //'2'
 const byte ClearRow = 0x33;             //'3'
 const byte Contrast = 0x34;             //'4' 
-const byte Test = 0x35;                 //'5' 
+const byte DTest = 0x35;                //'5'   Runs a display test
 
 //I2CDisplay Colours
 const byte Black = 0x00;

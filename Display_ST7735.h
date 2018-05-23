@@ -18,7 +18,7 @@ free from errors.
 
 These routines are for the ST7735 TFT display. 
 
-This program uses the Adafruit_GFX and Adafruit_PCD8544 Arduino Libraries
+This program uses the Adafruit_GFX and Adafruit_ST7735 Arduino Libraries
 
 https://github.com/adafruit/Adafruit-ST7735-Library
 https://github.com/adafruit/Adafruit-GFX-Library

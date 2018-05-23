@@ -162,7 +162,7 @@ void I2CDisplay::SetBackgroundColour(byte lcolour)
 void I2CDisplay::DoTest()
 {
   Wire.beginTransmission(_Display_Address);  //send backpack address
-  Wire.write(Test);
+  Wire.write(DTest);
   Wire.endTransmission();
   Checkforwait();
 }

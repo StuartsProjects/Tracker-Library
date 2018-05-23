@@ -16,7 +16,7 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  Hardware definitions for the PIHTracker3 board.
+  Hardware definitions for the Locator2 board.
 
   To Do:
 

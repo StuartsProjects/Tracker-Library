@@ -115,6 +115,7 @@ const byte lora_RegFeiMid = 0x29;
 const byte lora_RegFeiLsb = 0x2A;
 const byte lora_RegPacketConfig2 = 0x31;
 const byte lora_RegDioMapping = 0x40;
+const byte lora_RegDioMapping2 = 0x41;
 const byte lora_RegPllHop = 0x44;
 
 

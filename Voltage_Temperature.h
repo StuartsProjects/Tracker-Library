@@ -105,7 +105,11 @@ unsigned int read_SupplyVoltage()
 
 
   analogReference(INTERNAL);
-  for (index = 0; index <= 4; index++)                      //sample AD 3 times
+  
+  temp = analogRead(SupplyAD);                               //first reading after setting reference often not accurate                      
+  delay(10);
+  
+  for (index = 0; index <= 4; index++)                      //sample AD 5 times
   {
     temp = analogRead(SupplyAD);
     SupplyVolts = SupplyVolts + temp;

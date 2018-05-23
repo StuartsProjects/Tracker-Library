@@ -16,52 +16,65 @@ of the author Stuart Robinson.
 The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
 free from errors.
 
-This program uses the text only Arduino Library for the I2C SSD1306 OLED;
+This program uses the text only Arduino Library for the I2C SD1306 OLED;
 
 https://github.com/greiman/SSD1306Ascii
 
 Download the Zip file, UnZip it and read the installation instructions in the 'Documentation.html' file.
 
-
 This program is for a directly connected SD1306 OLED, you must set the global constant 'I2C_Address' to the I2C address of 
-the SD1306 display before use.
+the SD1306 display before use. 
  
 ***********************************************************************************************************************************
 */
 
-#define Using_Display_SD1306_AVR
-
-#include "SSD1306Ascii.h"                            //https://github.com/greiman/SSD1306Ascii
-#include "SSD1306AsciiAvrI2c.h"
-SSD1306AsciiAvrI2c disp;
-
+#define Using_Display_SD1306_Adafruit
+#include <Wire.h>
+#include <Adafruit_GFX.h>                            //https://github.com/adafruit/Adafruit-GFX-Library 
+#include <Adafruit_SSD1306.h>                        //https://github.com/adafruit/Adafruit_SSD1306
+#define OLED_RESET 4
+Adafruit_SSD1306 disp(OLED_RESET);
 
 byte tsize;
 
 
 void Display_Clear()
 {
-disp.clear();
+disp.clearDisplay();
 }
 
 
 void Display_SetCurPos(byte lcol, byte lrow)
 {
+  
+  if (tsize == 1)
+  {
   lcol = lcol * 6;
+  lrow = lrow * 8;
+  }
+  
+  if (tsize == 2)
+  {
+  lcol = lcol * 12;
+  lrow = lrow * 16;
+  }
+  
   disp.setCursor(lcol, lrow);
 }
 
 
 void Display_Setup()
 {
-  disp.begin(&Adafruit128x64, I2C_ADDRESS);
-  disp.setFont(System5x7);
+  Wire.begin();
+  disp.begin(SSD1306_SWITCHCAPVCC, I2C_Address);  // initialize with the I2C addr, normally 0x3C 
+  disp.setTextColor(WHITE);
 }
+
 
 
 void Display_Update()
 {
-//not required disp.display();
+disp.display();
 }
 
 
@@ -75,10 +88,12 @@ void Display_SetTextSize(byte lfont)
 {
   if (lfont == 1)                  // font size 1 requested ?
   {
-    disp.set1X();
+    tsize = 1;
+	disp.setTextSize(1);
   }
   if (lfont == 2)                 // font size 2 requested ?
   {
-    disp.set2X();
+    tsize = 2;
+	disp.setTextSize(2);
   }
 }

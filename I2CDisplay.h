@@ -67,7 +67,6 @@ const byte dowaitready = 1;
 const byte nowaitready = 0;
 
 
-
 class I2CDisplay : public Print
 {
   public:

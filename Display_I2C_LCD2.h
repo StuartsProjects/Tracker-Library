@@ -25,9 +25,9 @@
 #define Using_Display_I2C_LCD
 
 #include <Wire.h>  
-#include <LiquidCrystal_I2C.h>                                   //https://bitbucket.org/fmalpartida/new-liquidcrystal/downloads/ (version 1.3.4)
-
+#include <LiquidCrystal_I2C.h>                                   
 LiquidCrystal_I2C disp(PCF8574Address, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  //Set the LCD I2C address and pins used
+
 
 byte currentsize = 1;                     //used to keep track of current text size 1 or 2
 
@@ -68,8 +68,10 @@ void Display_SetCurPos(byte col, byte row)
 }
 
 
+
 void Display_Setup()
 {
+  Wire.begin();
   disp.begin(20,4);                   //initialize the lcd for 20 chars 4 lines, turn on backlight
   disp.backlight();
   Display_Clear();

@@ -65,7 +65,8 @@ const char WritePacketMemory = '0';     //Write bytes to Memory
 const char TestMode1 = '1';             //used to switch to Testmode1 settings
 const char TestMode2 = '2';             //used to switch to Testmode2 settings
 const char INCFreq = '3';               //Increase frequency 
-const char DECFreq = '4';               //Decrease frequency 
+const char DECFreq = '4';               //Decrease frequency
+const char InfoRelay = '5';             //used to relay screen SNR and RSSI in ping test. 
 const char LMLCSVPacket = '8';          //short LML payload; lat,lon,alt in CSV ASCII format
 const char LMLCSVPacket_Repeated = '9'; //short LML payload that has been repeated
 

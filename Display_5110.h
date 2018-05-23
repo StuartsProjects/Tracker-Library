@@ -15,8 +15,10 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This program creates a standard set of programs to use with the Nokia 5110 display. There are similar programs for other
+  This program creates a standard set of functions to use with the Nokia 5110 display. There are similar programs for other
   displays. This allows for different displays to be used without needing chnages to the main programs.
+  
+  This program is for a directly connected Nokia %110 display.
 
   To Do:
 
