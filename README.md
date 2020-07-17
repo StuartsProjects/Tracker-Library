@@ -1,26 +1,26 @@
-This repository contains the library programs (.h) files required by the various LoRaTracker programs.
+This repository contains the library programs (.h) files required by the various Tracker programs.
 
 The library files need to be accessible to the Arduino IDE at program compile time, there are three ways
 to achieve this;
 
 
-1. Create a 'LoRaTracker' folder in your \users\Arduino\libraries folder, mine is located here on a Windows 7 PC;
+1. Create a 'Tracker' folder in your \users\Arduino\libraries folder, mine is located here on a Windows 7 PC;
 
-   C:\Users\Admin\Documents\Arduino\libraries\LoRaTracker
+   C:\Users\Admin\Documents\Arduino\libraries\Tracker
    
-   And copy all the LoRaTracker library files there.  
+   And copy all the Tracker library files there.  
 
-2. For a seperate Arduino installation create a folder called 'LoRaTracker' and place all the files in there. 
+2. For a seperate Arduino installation create a folder called 'Tracker' and place all the files in there. 
 
    For instance I have my own Arduino installation on a separate drive (Y:) so I would create this folder;
 
-   Y:\Arduino\libraries\LoRaTracker
+   Y:\Arduino\libraries\Tracker
 
 
 3. Copy all the library files into the same folder as the programs .ino file. For example on my own PC I have 
    a HAB tracker program here;
 
-   Y:\Projects\HAB2\LoRaTracker_HAB2_011017.ino
+   Y:\Projects\HAB2Tracker_HAB2_011017.ino
 
    So I would need to copy all the library files into the Y:\Projects\HAB2\ folder, or you could copy just the
    ones you need. 

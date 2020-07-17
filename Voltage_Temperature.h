@@ -1,11 +1,11 @@
 //Voltage_Temperature.h
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 2/10/17
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -106,7 +106,7 @@ unsigned int read_SupplyVoltage()
 
   analogReference(INTERNAL);
   
-  temp = analogRead(SupplyAD);                               //first reading after setting reference often not accurate                      
+  temp = analogRead(SupplyAD);                              //first reading after setting reference often not accurate                      
   delay(10);
   
   for (index = 0; index <= 4; index++)                      //sample AD 5 times

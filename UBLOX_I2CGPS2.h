@@ -1,11 +1,11 @@
 //UBLOX_I2CGPS2.h
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 26/1/18
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -54,6 +54,8 @@ byte GPS_Reply[GPS_Reply_Size];             //byte array for storing GPS reply t
 #include "UBX_Commands2.h"
 #define USING_I2CGPS                        //so the rest of the program knows I2C GPS is in use
 #define UBLOX                               //so the rest of the program knows UBLOX GPS is in use
+
+#define GPSI2CAddress 0x42                       //I2C address of GPS
 
 
 byte GPS_GetByte()                          //get and process output from GPS

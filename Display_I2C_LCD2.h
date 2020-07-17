@@ -1,11 +1,11 @@
 //Display_I2C_LCD2.h
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 2/10/17
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -27,7 +27,6 @@
 #include <Wire.h>  
 #include <LiquidCrystal_I2C.h>                                   
 LiquidCrystal_I2C disp(PCF8574Address, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  //Set the LCD I2C address and pins used
-
 
 byte currentsize = 1;                     //used to keep track of current text size 1 or 2
 

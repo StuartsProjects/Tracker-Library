@@ -5,7 +5,7 @@
 
   Copyright of the author Stuart Robinson - 10/1/18
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 

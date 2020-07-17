@@ -1,9 +1,10 @@
-//Sensor1_Board_Definitions.h
+//BackpackV4_Board_Definitions.h
 
 /*
 *******************************************************************************************************************************
+  Easy Build Tracker Programs for Arduino
 
-  Copyright of the author Stuart Robinson - 10/1/18
+  Copyright of the author Stuart Robinson - 12/12/17
 
   
 
@@ -15,16 +16,39 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This is the hardware definitions for the Heltec ESP32 WiFi LoRa board
+  This is the hardware definitions for the BackpackV4 board, PCB with date 161017.
 
   To Do:
 
 *******************************************************************************************************************************
 */
 
+/*
+Pin connections for ILI934
+--------------------------
 
-#define lora_NSS 18                  //Arduino pin number for device select on LoRa device
-#define lora_NReset 14               //Arduino pin number for reset pin on LoRa device, can be left not connected
-#define lora_TonePin -1              //Not used 
-#define lora_DIO0 26                 //Arduino pin number connceted to DIO0 pin on LoRa device,  can be left not connected
-#define LED1 25                      //Arduino pin number for LED, when high LED should be on.  
+VCC to  VCC 3.3V
+GND to GND
+CS to 10
+RESET to 9
+D\C to 8
+SDI(MOSI) to 11
+SCK to 13
+LED to VCC 3.3V
+SDO(MISO) to 12
+
+Pin connections for Nokia5110
+-----------------------------
+RST to 9
+CE to 10
+DC to 8
+DIN to 11
+CLK to 13
+VCC to VCC 3.3V
+LIGHT to GND for backlight
+GND to GND
+*/
+
+#define DISP_CS 10
+#define DISP_RESET 9
+#define DISP_DC 8

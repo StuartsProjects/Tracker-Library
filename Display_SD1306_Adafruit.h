@@ -2,11 +2,11 @@
 /*
 ***********************************************************************************************************************************
 
-Easy Build LoRaTracker Programs for Arduino
+Easy Build Tracker Programs for Arduino
 
 Copyright of the author Stuart Robinson - 2/10/2017
 
-http://www.LoRaTracker.uk
+
 
 These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -66,7 +66,7 @@ void Display_SetCurPos(byte lcol, byte lrow)
 void Display_Setup()
 {
   Wire.begin();
-  disp.begin(SSD1306_SWITCHCAPVCC, I2C_Address);  // initialize with the I2C addr, normally 0x3C 
+  disp.begin(SSD1306_SWITCHCAPVCC, SSD1306_Address);  // initialize with the I2C addr, normally 0x3C 
   disp.setTextColor(WHITE);
 }
 

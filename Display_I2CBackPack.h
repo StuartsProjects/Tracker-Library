@@ -2,11 +2,11 @@
 /*
 **************************************************************************************************
 
-  LoRaTracker Programs for Arduino
+  Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 2/10/17
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -25,7 +25,7 @@
 
 */
 
-#include "I2CDisplay.h"                        //inlude library file from LoRaTracker library
+#include "I2CDisplay.h"                        //include library file from Tracker library
 I2CDisplay disp(Display_Address);              //create the display class
 
 

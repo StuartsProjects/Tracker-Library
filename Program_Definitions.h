@@ -2,11 +2,11 @@
 
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 2/10/17
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -16,7 +16,7 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  General program definitions used by various LoRaTracker boards.
+  General program definitions used by various Tracker boards.
 
   To Do:
 
@@ -81,14 +81,21 @@ const char HABPacket = '$';             //HAB Style location payload in CSV ASCI
 ******************************************************************************************************
 */
 
-//Bit numbers for current_config byte settings
-const byte SearchEnable = 0;         //bit num to set in config byte to enable search mode packet
-const byte TXEnable = 1;             //bit num to set in config byte to enable transmissions
-const byte FSKRTTYEnable = 2;        //bit num to set in config byte to enable FSK RTTY
-const byte CheckFence = 3;           //bit number to control whether fence is checked 0 = NoCheck
-const byte DozeEnable = 4;           //bit num to set in config byte to put tracker in Doze mode
-const byte AddressStrip = 6;         //bit number to control address part of payload, 1 to strip, 0 to allow
-const byte GPSHotFix = 7;            //bit when set enables GPS Hot Fix mode.
+//Bit numbers for current_config byte settings in transmitter (addr_Default_config1)
+const byte SearchEnable = 0;           //bit num to set in config byte to enable search mode packet
+const byte TXEnable = 1;               //bit num to set in config byte to enable transmissions
+const byte FSKRTTYEnable = 2;          //bit num to set in config byte to enable FSK RTTY
+const byte CheckFence = 3;             //bit number to control whether fence is checked 0 = NoCheck
+const byte DozeEnable = 4;             //bit num to set in config byte to put tracker in Doze mode
+const byte AddressStrip = 6;           //bit number to control address part of payload, 1 to strip, 0 to allow
+const byte GPSHotFix = 7;              //bit when set enables GPS Hot Fix mode.
+
+//Bit numbers for current_config byte settings in receiver ((addr_Default_config2)
+const byte UseSD = 0;                  //bit num to set in config byte to enable search mode packet
+const byte TXEnable_RX = 1;            //bit num to set in config byte to enable transmissions
+const byte Send_AFSK_RTTY_Upload = 2;  //bit num to set in config byte to enable AFSK_RTTY send
+const byte Send_Bluetooth_Uplink = 3;  //bit num to set in config byte to enable Bluetooth uplink
+const byte Do_MENUDEBUG = 4;           //bit num to set in config byte to enable Menu debugging
 
 
 //Status byte settings
@@ -151,7 +158,7 @@ const unsigned int addr_EndBindData = 0x17;                   //marks the end of
   START config data
 **********************************************************************/
 const unsigned int addr_StartConfigData = 0x18;               //the start of config data in memory
-const unsigned int addr_Default_config1 = 0x18;               //byte 1 byte
+const unsigned int addr_Default_config1 = 0x18;               //byte 1 byte (Used)
 const unsigned int addr_ThisNode = 0x19;                      //char 1 byte
 const unsigned int addr_RemoteControlNode = 0x1A;             //char 1 byte
 const unsigned int addr_ControlledNode = 0x1B;                //char 1 byte
@@ -164,7 +171,7 @@ const unsigned int addr_east_fence = 0x24;                    //float 4 bytes
 const unsigned int addr_south_fence = 0x28;                   //float 4 bytes
 const unsigned int addr_north_fence = 0x2C;                   //float 4 bytes
 const unsigned int addr_FlightID = 0x30;                      //Character array 16 bytes max
-const unsigned int addr_Default_config2 = 0x40;               //byte 1 byte
+const unsigned int addr_Default_config2 = 0x40;               //byte 1 byte for receiver 
 const unsigned int addr_promiscuous_Mode = 0x41;              //byte 1 byte
 const unsigned int addr_BindCRC = 0x50;                       //the 16 bit CRC of the current Bind Data, addr_StartBindData to addr_EndBindData
 const unsigned int addr_CalibrationOffset = 0x80;             //int 2 bytes
@@ -178,8 +185,8 @@ const unsigned int addr_FSKRTTYRegshift = 0x94;               //unsigned int 2 b
 const unsigned int addr_FSKRTTYleadin = 0x96;                 //unsigned int 2 bytes
 const unsigned int addr_MinsToLost = 0x98;                    //unsigned int 2 bytes
 const unsigned int addr_TXDelaySecs = 0x9A;                   //unsigned int 2 bytes
-const unsigned int addr_TXLostDelaySecs = 0x9C;               //unsigned int 2 bytes
-const unsigned int addr_pulseerrorlimit = 0x9E;               //unsigned int 2 bytes
+const unsigned int addr_TXLostDelaySecs = 0x9C;               //unsigned int 2 bytes (not used)
+const unsigned int addr_pulseerrorlimit = 0x9E;               //unsigned int 2 bytes (not used)
 const unsigned int addr_holddifference = 0xA0;                //unsigned int 2 bytes
 const unsigned int addr_RCpulseshort = 0xA2;                  //unsigned int 2 bytes
 const unsigned int addr_RCpulselong = 0xA4;                   //unsigned int 2 bytes
@@ -188,7 +195,7 @@ const unsigned int addr_inc_on_error = 0xA8;                  //char 1 byte
 const unsigned int addr_dec_on_OK = 0xA9;                     //char 1 byte
 const unsigned int addr_FSKRTTYpips = 0xAA;                   //char 1 byte
 const unsigned int addr_Default_config3 = 0xAB;               //byte 1 byte
-const unsigned int addr_ASKRTTYbaudDelay = 0xAC;              //unsigned int 2 bytes
+const unsigned int addr_AFSKRTTYbaudDelay = 0xAC;             //unsigned int 2 bytes
 const unsigned int addr_Default_config4 = 0xAD;               //byte 1byte
 const unsigned int addr_Cmd_WaitSecs = 0xAE;                  //byte 1byte
 const unsigned int addr_TestLocation_page0 = 0xFF;            //used as a location for read\write tests
@@ -208,7 +215,7 @@ const unsigned int addr_SequenceNum = 0x104;                  //unsigned long in
 const unsigned int addr_mASecs = 0x108;                       //unsigned long int 4 bytes
 const unsigned int addr_TRStatus = 0x10C;                     //byte, used to store status
 const unsigned int addr_TestLocation_page1 = 0x1FF;           //used as a location for read\write tests
-const unsigned int addr_EndProgramData = 0x100;               //the end of program data in memory
+const unsigned int addr_EndProgramData = 0x110;               //the end of program data in memory
 /*********************************************************************
   END Program data
 **********************************************************************/

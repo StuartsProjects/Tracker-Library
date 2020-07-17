@@ -1,11 +1,11 @@
 //UBLOX_SerialGPS.h
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 26/1/18
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -30,7 +30,7 @@ byte GPS_GetByte();
 void GPS_StartRead();
 void GPS_On();
 void GPS_Off();
-boolean GPS_WaitAck(unsigned long waitms, byte length);
+bool GPS_WaitAck(unsigned long waitms, byte length);
 void GPS_Send_Config(unsigned int Progmem_ptr, byte length, byte replylength);
 void GPS_Setup();
 void GPS_ClearConfig();
@@ -39,14 +39,14 @@ void GPS_StopMessages();
 void GPS_SetNavigation();
 void GPS_SaveConfig();
 void GPS_PollNavigation();
-boolean GPS_CheckNavigation();
+bool GPS_CheckNavigation();
 void GPS_SetCyclicMode();
 void GPS_SoftwareBackup();
 void GPS_PMREQBackup();
 void GPS_LowCurrent();
 
 
-byte GPS_Reply[GPS_Reply_Size];             //byte array for storing GPS reply to UBX commands
+uint8_t GPS_Reply[GPS_Reply_Size];          //byte array for storing GPS reply to UBX commands
   
 #include "UBX_Commands2.h"                  //arrays that have the command sequences
 #define USING_SERIALGPS                     //so the rest of the program knows serial GPS is in use
@@ -289,7 +289,7 @@ void GPS_ClearConfig()
 {
   Serial.print(F("GPS ClearConfig "));
   size_t SIZE = sizeof(ClearConfig);  
-  GPS_Send_Config(ClearConfig,SIZE,10,GPS_attempts);
+  GPS_Send_Config(ClearConfig,SIZE,4,GPS_attempts);
   Serial.println(F("Wait clear"));
   delay(GPS_Clear_DelaymS);                            //wait a while for GPS to clear its settings 
 }
@@ -299,7 +299,7 @@ void GPS_SetGPMode()
 {
   Serial.print(F("GPS GLONASS_Off "));
   size_t SIZE = sizeof(GLONASS_Off);  
-  GPS_Send_Config(GLONASS_Off, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(GLONASS_Off, SIZE, 4, GPS_attempts);
 }
 
 
@@ -308,20 +308,20 @@ void GPS_StopMessages()
   size_t SIZE;
   Serial.print(F("GPS GPGLL_Off "));
   SIZE = sizeof(GPGLL_Off); 
-  GPS_Send_Config(GPGLL_Off, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(GPGLL_Off, SIZE, 4, GPS_attempts);
 
   Serial.print(F("GPS GPGLS_Off "));
   SIZE = sizeof(GPGLS_Off); 
-  GPS_Send_Config(GPGLS_Off, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(GPGLS_Off, SIZE, 4, GPS_attempts);
 
   Serial.print(F("GPS GPGSA_Off "));
   SIZE = sizeof(GPGSA_Off); 
-  GPS_Send_Config(GPGSA_Off, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(GPGSA_Off, SIZE, 4, GPS_attempts);
 
   #ifndef GPS_ALLOW_GPGSV
   Serial.print(F("GPS GPGSV_Off "));
   SIZE = sizeof(GPGSV_Off); 
-  GPS_Send_Config(GPGSV_Off, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(GPGSV_Off, SIZE, 4, GPS_attempts);
   #endif
 }
 
@@ -330,7 +330,7 @@ void GPS_SetNavigation()
 {
   Serial.print(F("GPS SetNavigation "));
   size_t SIZE = sizeof(SetNavigation); 
-  GPS_Send_Config(SetNavigation, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(SetNavigation, SIZE, 4, GPS_attempts);
 }
 
 
@@ -338,7 +338,7 @@ void GPS_SaveConfig()
 {
   Serial.print(F("GPS Save "));
   size_t SIZE = sizeof(SaveConfig); 
-  GPS_Send_Config(SaveConfig, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(SaveConfig, SIZE, 4, GPS_attempts);
 }
 
 
@@ -346,7 +346,7 @@ void GPS_PollNavigation()
 {
   Serial.print(F("GPS PollNavigation "));
   size_t SIZE = sizeof(PollNavigation); 
-  GPS_Send_Config(PollNavigation, SIZE, 44, GPS_attempts);
+  GPS_Send_Config(PollNavigation, SIZE, 8, GPS_attempts);
 }
 
 
@@ -354,7 +354,7 @@ void GPS_SetCyclicMode()
 {
   Serial.print(F("GPS SetCyclic "));
   size_t SIZE = sizeof(SetCyclicMode); 
-  GPS_Send_Config(SetCyclicMode, SIZE, 10, GPS_attempts);
+  GPS_Send_Config(SetCyclicMode, SIZE, 4, GPS_attempts);
 }
 
 void GPS_SoftwareBackup()

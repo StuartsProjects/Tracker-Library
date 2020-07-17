@@ -1,11 +1,11 @@
-//LoRa3.h
+//LoRa4.h
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 13/10/17
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -101,6 +101,7 @@ const byte lora_RegRxPacketCntValueLsb = 0x17;
 const byte lora_RegPktSnrValue = 0x19;
 const byte lora_RegPktRssiValue = 0x1A;
 const byte lora_RegRssiValue = 0x1B;
+const byte lora_RegHopChannel = 0x1C;
 const byte lora_RegFsiMSB = 0x1D;
 const byte lora_RegFsiLSB = 0x1E;
 const byte lora_RegModemConfig1 = 0x1D;
@@ -114,8 +115,13 @@ const byte lora_RegFeiMsb = 0x28;
 const byte lora_RegFeiMid = 0x29;
 const byte lora_RegFeiLsb = 0x2A;
 const byte lora_RegPacketConfig2 = 0x31;
+const byte lora_RegInvertIQ = 0x33;
+const byte lora_RegSyncWord = 0x39;
+const byte lora_RegImageCal = 0x3b;
+const byte lora_RegTemp = 0x3c;
 const byte lora_RegDioMapping = 0x40;
 const byte lora_RegDioMapping2 = 0x41;
+const byte lora_RegVersion = 0x42;
 const byte lora_RegPllHop = 0x44;
 
 
@@ -390,14 +396,15 @@ void lora_TXONDirect(byte TXPower)
 void lora_TXOFF()
 {
   //turns off transmitter
+ lora_TXTime = (millis() - lora_StartTXTime);
  lora_Write(lora_RegOpMode, 0x08);           //TX and RX to sleep, in direct mode
 #ifdef LORADEBUG
-  unsigned long temp;
-  temp = millis() - lora_StartTXTime;
-  Serial.print(temp);
+  //unsigned long temp;
+  //temp = millis() - lora_StartTXTime;
+  Serial.print(lora_TXTime);
   Serial.println(F("mS"));
 #endif
-  lora_TXTime = (millis() - lora_StartTXTime);
+  //lora_TXTime = (millis() - lora_StartTXTime);
 }
 
 
@@ -595,7 +602,9 @@ void lora_ReadPacket()
 {
   byte index, RegData;
   lora_RXpacketCount++;
-  lora_RXPacketL = lora_Read(lora_RegRxNbBytes);
+  
+  //lora_RXPacketL = lora_Read(lora_RegRxNbBytes);
+  lora_RXPacketL = min((lora_Read(lora_RegRxNbBytes)),(lora_RXBUFF_Size-1));   //ensure long packet cannot overwrite buffer end
   
   lora_PacketRSSI = lora_returnRSSI(lora_Read(lora_RegPktRssiValue));
   lora_PacketSNR = lora_returnSNR(lora_Read(lora_RegPktSnrValue));
@@ -629,7 +638,7 @@ void lora_RXONLoRa()
   lora_Write(lora_RegOpMode, 0x09);
   lora_Write(lora_RegFifoRxBaseAddr, 0x00);
   lora_Write(lora_RegFifoAddrPtr, 0x00);
-  lora_Write(lora_RegIrqFlagsMask, 0x9F);                //only allow rxdone and crc error
+  lora_Write(lora_RegIrqFlagsMask, 0x9F);                //allow rxdone and crc error
   lora_Write(lora_RegIrqFlags, 0xFF);
   lora_Write(lora_RegDioMapping, 0x00);                  //DIO0 will be RXDone
   lora_Write(lora_RegOpMode, 0x8D);

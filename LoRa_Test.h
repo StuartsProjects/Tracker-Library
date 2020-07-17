@@ -1,11 +1,11 @@
 //LoRa_Test.h
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 21/1/18
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -516,8 +516,8 @@ void lora_RXBuffPrint(byte PrintType)
   //PrintType = 1 = Decimal
   //PrintType = 2 = HEX
   byte bufferData;
-  //byte index, bufferData;
 
+  
   Serial.write(lora_RXPacketType);
   Serial.write(lora_RXDestination);
   Serial.write(lora_RXSource);
@@ -614,7 +614,8 @@ void lora_ReadPacket()
 {
   byte index, RegData;
   lora_RXpacketCount++;
-  lora_RXPacketL = lora_Read(lora_RegRxNbBytes);
+  
+  lora_RXPacketL = min((lora_Read(lora_RegRxNbBytes)),(lora_RXBUFF_Size-1));   //ensure long packet cannot overwrite buffer end
 
   lora_PacketRSSI = lora_returnRSSI(lora_Read(lora_RegPktRssiValue));
   lora_PacketSNR = lora_returnSNR(lora_Read(lora_RegPktSnrValue));
@@ -743,7 +744,6 @@ byte lora_waitPacket(char waitPacket, unsigned long waitSeconds)
 */
 
 
-
 void lora_TXBuffPrint(byte PrintType)
 {
   //Print contents of TX buffer as ASCII,decimal or HEX
@@ -791,6 +791,71 @@ void lora_TXONLoRa(byte TXPower)
   lora_Write(lora_RegPaConfig, (TXPower + 0xEE));   //set TX power
   lora_Write(lora_RegOpMode, 0x8B);                 //TX on direct mode, low frequency mode
 }
+
+
+void lora_SendRXBuffer(byte RXBuffStart, byte RXBuffEnd, char TXPacketType, char TXDestination, char TXSource, long TXTimeout, byte TXPower, byte StripAddress)
+{
+  byte index;
+  byte BufferData, RegData;
+  byte TXPacketL = 0;
+
+  lora_Write(lora_RegOpMode, 0x09);
+  lora_Write(lora_RegIrqFlags, 0xFF);
+  lora_Write(lora_RegIrqFlagsMask, 0xF7);
+  lora_Write(lora_RegFifoTxBaseAddr, 0x00);
+  lora_Write(lora_RegFifoAddrPtr, 0x00);            //start burst read
+
+  digitalWrite(lora_NSS, LOW);                      //Set NSS low
+  SPI.transfer(lora_WRegFifo);                      //address for burst write
+
+  if (!StripAddress)
+  {
+    SPI.transfer(TXPacketType);                     //Write the packet type
+    SPI.transfer(TXDestination);                    //Destination node
+    SPI.transfer(TXSource);                         //Source node
+    TXPacketL = 3;                                  //We have added 3 header bytes
+  }
+
+  for (index = RXBuffStart; index <= RXBuffEnd; index++)
+  {
+    TXPacketL++;
+
+    if (TXPacketL > 253)                            //check for overlong packet here, wraps around from limit at 251 to 0
+    {
+      TXPacketL--;                                  //remove increment to packet length
+      break;
+    }
+    BufferData = lora_RXBUFF[index];
+    SPI.transfer(BufferData);
+  }
+
+  digitalWrite(lora_NSS, HIGH);                     //finish the burst write
+  lora_Write(lora_RegPayloadLength, TXPacketL);
+  //Serial.print(F(" ")); 
+  //Serial.print(TXPacketL);
+  //Serial.print(F(" "));
+  
+  TXTimeout = TXTimeout * 945;                      //convert seconds to mS, delay in TX done loop is 1ms
+
+  lora_TXONLoRa(TXPower);
+
+  do
+  {
+    delay(1);
+    TXTimeout--;
+    RegData = lora_Read(lora_RegIrqFlags);
+  }
+  while (TXTimeout > 0 && RegData == 0) ;           //use a timeout counter, just in case the TX sent flag is missed
+
+  if (TXTimeout == 0)
+  {
+  Serial.print(F("Timeout "));  
+  }
+
+  lora_TXOFF();
+}
+
+
 
 
 

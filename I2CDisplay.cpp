@@ -1,5 +1,5 @@
 #include "Arduino.h"
-#include "I2CDisplay.h"
+#include <I2CDisplay.h>
 
 
 I2CDisplay::I2CDisplay(int Display_Address)      //I2CDisplay:: before the name of the function says that the function (I2CDisplay()) is part of the I2CDisplay class.

@@ -1,4 +1,4 @@
-//Display_I2C_LCD.h
+//Display_I2C_LCD2.h
 /*
 *******************************************************************************************************************************
   Easy Build Tracker Programs for Arduino
@@ -25,11 +25,10 @@
 #define Using_Display_I2C_LCD
 
 #include <Wire.h>  
-#include <LiquidCrystal_I2C.h>                                   //https://bitbucket.org/fmalpartida/new-liquidcrystal/downloads/ (version 1.3.4)
+#include <LiquidCrystal_I2C.h>      //http://www.esp32learning.com/wp-content/uploads/2017/12/LiquidCrystal_I2C-master.zip  
 
-LiquidCrystal_I2C disp(0x3F, 2, 1, 0, 4, 5, 6, 7, 3, POSITIVE);  //Set the LCD I2C address and pins used
+LiquidCrystal_I2C disp(0x3F, 20, 4); // set the LCD address to 0x3F for a 16 chars and 2 line display
 
-byte currentsize = 1;                     //used to keep track of current text size 1 or 2
 
 
 void Display_Update()
@@ -68,8 +67,10 @@ void Display_SetCurPos(byte col, byte row)
 }
 
 
+
 void Display_Setup()
 {
+  Wire.begin();
   disp.begin(20,4);                   //initialize the lcd for 20 chars 4 lines, turn on backlight
   disp.backlight();
   Display_Clear();

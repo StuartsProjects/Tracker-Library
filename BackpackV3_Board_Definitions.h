@@ -1,12 +1,12 @@
-//BackpackV4_Board_Definitions.h
+//BackpackV3_Board_Definitions.h
 
 /*
 *******************************************************************************************************************************
-  Easy Build LoRaTracker Programs for Arduino
+  Easy Build Tracker Programs for Arduino
 
   Copyright of the author Stuart Robinson - 12/12/17
 
-  http://www.LoRaTracker.uk
+  
 
   These programs may be used free of charge for personal, recreational and educational purposes only.
 
@@ -16,7 +16,7 @@
   The programs are supplied as is, it is up to individual to decide if the programs are suitable for the intended purpose and
   free from errors.
 
-  This is the hardware definitions for the BackpackV4 board, PCB with date 161017.
+  This is the hardware definitions for the BackpackV3 board, PCB with date 030416.
 
   To Do:
 
@@ -24,8 +24,8 @@
 */
 
 /*
-Pin connections for ILI934
---------------------------
+Pin connections for ILI9341
+---------------------------
 
 VCC to  VCC 3.3V
 GND to GND
@@ -48,6 +48,7 @@ VCC to VCC 3.3V
 LIGHT to GND for backlight
 GND to GND
 */
+
 
 #define DISP_CS 10
 #define DISP_RESET 9
